@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         //------------------------------------------------------------------------------------------
-
+        // yolo maister
         // TODO: your code here
     }
 
