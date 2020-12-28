@@ -1,5 +1,6 @@
 package com.example.test2.Toolbox;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,4 +31,7 @@ public class Racun {
         // poizvedba v db
     }
 
+    public String getDate(){
+        return  DateFormat.getDateTimeInstance().format(this.Datum);
+    }
 }
