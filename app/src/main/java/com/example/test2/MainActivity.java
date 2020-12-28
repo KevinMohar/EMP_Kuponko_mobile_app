@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        if(savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_domov);
+        }
         //------------------------------------------------------------------------------------------
 
         // TODO: your code here
@@ -63,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Login(this);
                 break;
         }
+
+        drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
