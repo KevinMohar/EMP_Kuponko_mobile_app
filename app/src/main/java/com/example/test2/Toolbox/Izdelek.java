@@ -1,4 +1,4 @@
-package Toolbox;
+package com.example.test2.Toolbox;
 
 public class Izdelek {
 
