@@ -1,5 +1,6 @@
 package com.example.test2.Toolbox;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,14 +11,14 @@ public class Racun {
     public Date Datum;
     public float Znesek;
 
-    public List<Izdelek> Izdelki;
+    public ArrayList<Izdelek> Izdelki;
 
     public Racun(int id){
         this.ID = id;
         getDataFromDatabase();
     }
 
-    public Racun(int id, Trgovina trgovina, Date datum, float znesek, List<Izdelek> izdelki){
+    public Racun(int id, Trgovina trgovina, Date datum, float znesek, ArrayList<Izdelek> izdelki){
         this.ID = id;
         this.Trgovina = trgovina;
         this.Datum = datum;
