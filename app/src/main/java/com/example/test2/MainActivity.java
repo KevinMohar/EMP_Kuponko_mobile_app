@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.test2.Fragments.ColorTestFragment;
 import com.example.test2.Fragments.HomeFragment;
+import com.example.test2.Fragments.OpenCVtestFragment;
 import com.example.test2.Fragments.OverviewFragment;
 import com.example.test2.Fragments.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -66,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_racun:
                 Toast.makeText(this, "Logging in...", Toast.LENGTH_LONG).show();
                 Login(this);
+                break;
+            // za testeranje openCV, odstrani na koncu
+            case R.id.nav_OpenCV_test:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OpenCVtestFragment()).commit();
+                break;
+            case R.id.nav_Color_test:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ColorTestFragment()).commit();
                 break;
         }
 

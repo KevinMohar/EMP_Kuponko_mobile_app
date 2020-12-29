@@ -49,7 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         Racun r = racuni.get(position);
 
         holder.znesekRacuna.setText(String.format("%.2f", r.Znesek) +"€");
-        holder.imeRacuna.setText("RAČUN "+ position+1 +": "+ r.Trgovina.Ime);
+        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ r.Trgovina.Ime);
         holder.datumRacuna.setText(r.getDate());
     }
 
