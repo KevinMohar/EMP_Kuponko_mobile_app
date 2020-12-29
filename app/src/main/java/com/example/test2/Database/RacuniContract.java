@@ -10,10 +10,9 @@ public class RacuniContract {
 
     public static final class RacunEntry implements BaseColumns{
         public static final String TABLE_NAME = "racuni";
-        public static final String COLUM_1_ID = "id";
-        public static final String COLUM_2_NAME = "naziv";
-        public static final String COLUM_3_DATUM = "datum";
-        public static final String COLUM_4_ZNESEK = "znesek";
+        public static final String COLUM_1_NAME = "trgovina";
+        public static final String COLUM_2_DATUM = "datum";
+        public static final String COLUM_3_ZNESEK = "znesek";
     }
 
 }

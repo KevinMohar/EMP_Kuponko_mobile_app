@@ -1,5 +1,7 @@
 package com.example.test2.Fragments;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test2.Database.DBHelper;
+import com.example.test2.Database.RacuniContract;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
 import com.example.test2.Toolbox.Izdelek;
+import com.example.test2.Toolbox.Mesec;
 import com.example.test2.Toolbox.Racun;
 import com.example.test2.Toolbox.Trgovina;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,6 +39,8 @@ public class HomeFragment extends Fragment {
 
     private FloatingActionButton addBtn;
 
+    private SQLiteDatabase database;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +57,10 @@ public class HomeFragment extends Fragment {
                 AddRecipt();
             }
         });
+
+        DBHelper dbHelper = new DBHelper(this.getContext());
+        database = dbHelper.getWritableDatabase();
+
 
         // pusti na koncu
         return view;
@@ -70,6 +81,19 @@ public class HomeFragment extends Fragment {
 
     public void AddRecipt(){
         // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
+
+        // samo placeholder, taprav racun bo genereran ko slikas neki oz k ga vneses rocno
+        Racun racun = new Racun(1);
+
+        // zapisemo racun v tabelo racun
+        ContentValues cv = new ContentValues();
+        cv.put(RacuniContract.RacunEntry.COLUM_1_NAME, racun.Trgovina.Ime);
+        cv.put(RacuniContract.RacunEntry.COLUM_2_DATUM, racun.getDate());
+        cv.put(RacuniContract.RacunEntry.COLUM_3_ZNESEK, racun.Znesek);
+        database.insert(RacuniContract.RacunEntry.TABLE_NAME, null, cv);
+
+        // TODO: v tabeli meseci dodamo racun v seznam racunov trenutnega meseca
+
 
         // --------------------------------samo za testeranje---------------------------------------
         racuni.add(new Racun(3, new Trgovina(2, "Hofer", "neki"), Calendar.getInstance().getTime(), 321, new ArrayList<Izdelek>()));
