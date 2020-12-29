@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,13 +51,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // pusti na koncu
         return view;
     }
 
     private ArrayList<Racun> getRecipts(){
         ArrayList<Racun> racuni = new ArrayList<>();
 
-        // TODO: pridobi racune iz baze
+        // TODO: pridobi racune iz baze in nafilaj array
 
         // --------------------------------samo za testeranje---------------------------------------
         racuni.add(new Racun(1, new Trgovina(1, "Mercator", "vehova"), Calendar.getInstance().getTime(), 300, new ArrayList<Izdelek>()));
@@ -78,11 +80,16 @@ public class HomeFragment extends Fragment {
     }
 
     public void RemoveRecipt(int pos){
+
+        // TODO: odpre se alert ce hoces zbrisat, ce da --> zbrises racun iz baze in iz seznama
+
+
+        // da updejtas recycler view
         racuni.remove(pos);
         adapter.notifyItemRemoved(pos);
     }
 
-    private void buildRecyclerView(View view){
+    private void buildRecyclerView(final View view){
         recyclerView = view.findViewById(R.id.home_recycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
@@ -95,6 +102,19 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 OpenRecipt(position);
+
+                //--------------------------------samo za testeranje----------------------------------------
+                Toast.makeText(view.getContext(), "Izbran račun "+(position+1), Toast.LENGTH_LONG).show();
+                // -----------------------------------------------------------------------------------------
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                RemoveRecipt(position);
+
+                //--------------------------------samo za testeranje----------------------------------------
+                Toast.makeText(view.getContext(), "Izbrisan račun "+(position+1), Toast.LENGTH_LONG).show();
+                // -----------------------------------------------------------------------------------------
             }
         });
     }
@@ -102,8 +122,6 @@ public class HomeFragment extends Fragment {
     private void OpenRecipt(int pos){
         // TODO: odpremo pregled racuna
 
-        // za testeranje
-        racuni.get(pos).Znesek = 123;
-        adapter.notifyItemChanged(pos);
     }
+
 }
