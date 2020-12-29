@@ -17,18 +17,38 @@ import java.util.ArrayList;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
     private ArrayList<Racun> racuni;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        listener = listener;
+    }
 
     public static class HomeViewHolder extends RecyclerView.ViewHolder{
-
         public TextView imeRacuna;
         public TextView datumRacuna;
         public TextView znesekRacuna;
 
-        public HomeViewHolder(@NonNull View itemView) {
+        public HomeViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             imeRacuna = itemView.findViewById(R.id.home_recycler_item_imeRacuna);
             datumRacuna = itemView.findViewById(R.id.home_recycler_item_datumRacuna);
             znesekRacuna = itemView.findViewById(R.id.home_recycler_item_znesekRacuna);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -40,7 +60,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recycler_item, parent, false);
-        HomeViewHolder hvh = new HomeViewHolder(v);
+        HomeViewHolder hvh = new HomeViewHolder(v, listener);
         return hvh;
     }
 
