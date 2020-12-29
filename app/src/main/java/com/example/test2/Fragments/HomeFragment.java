@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
                 RemoveRecipt(position);
 
                 //--------------------------------samo za testeranje----------------------------------------
-                Toast.makeText(view.getContext(), "Izbrisan račun "+(position+1), Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "Račun izbrisan", Toast.LENGTH_LONG).show();
                 // -----------------------------------------------------------------------------------------
             }
         });
