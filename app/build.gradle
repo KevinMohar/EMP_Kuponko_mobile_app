@@ -38,6 +38,7 @@ dependencies {
 
     // image to text library by Google
     implementation 'com.google.android.gms:play-services-vision:20.1.2'
+    implementation 'com.google.android.gms:play-services-vision:9.8.0'
 
     implementation project(path: ':openCVLibrary343')
 }
