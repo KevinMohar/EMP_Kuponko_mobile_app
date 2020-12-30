@@ -12,6 +12,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -22,6 +23,8 @@ android {
     }
 
 }
+
+apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -34,11 +37,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // image crop library
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
     // image to text library by Google
-    implementation 'com.google.android.gms:play-services-vision:20.1.2'
-    implementation 'com.google.android.gms:play-services-vision:9.8.0'
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
 
     implementation project(path: ':openCVLibrary343')
 }
