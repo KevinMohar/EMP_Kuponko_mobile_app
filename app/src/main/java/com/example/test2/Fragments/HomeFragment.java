@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
 
         // TODO: pridobi racune iz baze in nafilaj array
 
-        // --------------------------------samo za testeranje---------------------------------------
+        // FIXME:-------------------------samo za testeranje----------------------------------------
         racuni.add(new Racun(1, new Trgovina(1, "Mercator", "vehova"), Calendar.getInstance().getTime(), 300, new ArrayList<Izdelek>()));
         racuni.add(new Racun(2, new Trgovina(2, "Lidl", "asdasd"), Calendar.getInstance().getTime(), 240, new ArrayList<Izdelek>()));
         // -----------------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
         // TODO: v tabeli meseci dodamo racun v seznam racunov trenutnega meseca
 
 
-        // --------------------------------samo za testeranje---------------------------------------
+        // FIXME:-------------------------samo za testeranje----------------------------------------
         racuni.add(new Racun(3, new Trgovina(2, "Hofer", "neki"), Calendar.getInstance().getTime(), 321, new ArrayList<Izdelek>()));
         // -----------------------------------------------------------------------------------------
 
@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(int position) {
                 OpenRecipt(position);
 
-                //--------------------------------samo za testeranje----------------------------------------
+                // FIXME:-------------------------samo za testeranje----------------------------------------
                 Toast.makeText(view.getContext(), "Izbran račun "+(position+1), Toast.LENGTH_LONG).show();
                 // -----------------------------------------------------------------------------------------
             }
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
             public void onDeleteClick(int position) {
                 RemoveRecipt(position);
 
-                //--------------------------------samo za testeranje----------------------------------------
+                // FIXME:-------------------------samo za testeranje----------------------------------------
                 Toast.makeText(view.getContext(), "Račun izbrisan", Toast.LENGTH_LONG).show();
                 // -----------------------------------------------------------------------------------------
             }
