@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Racun;
 import com.example.test2.R;
-import com.example.test2.RecyclerView.HomeAdapter;
 import com.example.test2.RecyclerView.OverviewAdapter;
-import com.example.test2.Toolbox.Mesec;
-import com.example.test2.Toolbox.Racun;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class OverviewFragment extends Fragment {
 
@@ -51,7 +51,7 @@ public class OverviewFragment extends Fragment {
         // TODO: pridobi mesece iz database;
 
         // FIXME:-------------------------samo za testeranje----------------------------------------
-            meseci.add(new Mesec(1, Calendar.getInstance().getTime(), 300, new ArrayList<Racun>()));
+            meseci.add(new Mesec(Calendar.getInstance().getTime(), 300, new ArrayList<Racun>()));
         // -----------------------------------------------------------------------------------------
 
         return meseci;

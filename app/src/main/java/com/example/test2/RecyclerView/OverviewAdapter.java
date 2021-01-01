@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.R;
-import com.example.test2.Toolbox.Mesec;
 
 import java.util.ArrayList;
 
@@ -83,8 +83,8 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Overvi
     public void onBindViewHolder(@NonNull OverviewViewHolder holder, int position) {
         Mesec m = meseci.get(position);
 
-        holder.mesec.setText(m.getDate());
-        holder.stroski.setText(m.stroski+"€");
+        holder.mesec.setText(m.getDateString());
+        holder.stroski.setText(m.getStroski()+"€");
     }
 
     @Override

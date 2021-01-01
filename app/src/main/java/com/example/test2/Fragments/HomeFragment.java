@@ -14,20 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.test2.Database.DBHelper;
-import com.example.test2.Database.RacuniContract;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
 import com.example.test2.Toolbox.Izdelek;
-import com.example.test2.Toolbox.Mesec;
 import com.example.test2.Toolbox.Racun;
 import com.example.test2.Toolbox.Trgovina;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
