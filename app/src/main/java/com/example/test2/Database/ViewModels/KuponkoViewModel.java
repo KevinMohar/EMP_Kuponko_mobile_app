@@ -46,7 +46,7 @@ public class KuponkoViewModel extends AndroidViewModel {
 
     //#####################################  DELETE TASKS  #########################################
     public void deleteRacun(Racun racun){ racunRepository.Delete(racun);}
-    public void deleteAllRacunsByDate(Date date){ racunRepository.DeleteAllByMonth(date);}
+    public void deleteAllRacunsByDate(Date from, Date to){ racunRepository.DeleteAllByMonth(from, to);}
     public void deleteAllRacuns(){ racunRepository.DeleteAllRacuns();}
     public void deleteMesec(Mesec mesec){mesecRepository.Delete(mesec);}
     public void deleteAllMesec(){mesecRepository.DeleteAll();}

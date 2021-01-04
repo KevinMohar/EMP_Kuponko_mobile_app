@@ -37,8 +37,8 @@ public interface RacunDAO {
     @Query("DELETE FROM racuni")
     void DeleteAllRacuns();
 
-    @Query("DELETE FROM racuni WHERE datum = :date")
-    void DeleteAllRacunsByMesec(Date date);
+    @Query("DELETE FROM racuni WHERE datum BETWEEN :from AND :to")
+    void DeleteAllRacunsByMesec(Date from, Date to);
     //##############################################################################################
 
     //#####################################  QUERY TASKS  ##########################################

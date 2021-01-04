@@ -42,8 +42,8 @@ public class RacunRepository {
     public void DeleteAllRacuns(){
         new DeleteAllRacunsAsyncTask(racunDAO).execute();
     }
-    public void DeleteAllByMonth(Date date){
-        new DeleteAllRacunsByMesecAsyncTask(racunDAO).execute(date);
+    public void DeleteAllByMonth(Date from, Date to){
+        new DeleteAllRacunsByMesecAsyncTask(racunDAO).execute(from, to);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
@@ -128,7 +128,7 @@ public class RacunRepository {
 
         @Override
         protected Void doInBackground(Date... dates) {
-            racunDAO.DeleteAllRacunsByMesec(dates[0]);
+            racunDAO.DeleteAllRacunsByMesec(dates[0], dates[1]);
             return null;
         }
     }

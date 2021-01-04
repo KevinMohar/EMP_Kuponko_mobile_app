@@ -28,7 +28,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -148,10 +147,12 @@ public class HomeFragment extends Fragment {
         cal.set(Calendar.DAY_OF_MONTH,cal.getActualMinimum(Calendar.DAY_OF_MONTH));
         Date datum = cal.getTime();
 
-
         curreentMonth = viewModel.getMonthByDate(datum);
-        if(curreentMonth == null)
+        if(curreentMonth == null){
             curreentMonth = new Mesec(datum, 0);
+            viewModel.insertMesec(curreentMonth);
+        }
+
     }
 
     private void setTitleText(){
