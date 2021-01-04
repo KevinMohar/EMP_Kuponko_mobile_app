@@ -1,5 +1,6 @@
 package com.example.test2.Database.ArchitectureComponents;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -42,12 +43,12 @@ public interface RacunDAO {
 
     //#####################################  QUERY TASKS  ##########################################
     @Query("SELECT * FROM racuni")
-    Maybe<List<Racun>> GetAllRacuns();
+    List<Racun> GetAllRacuns();
 
     @Query("SELECT * FROM racuni WHERE id = :id")
-    Maybe<Racun> GetRacunById(int id);
+    Racun GetRacunById(int id);
 
     @Query("SELECT * FROM racuni WHERE datum BETWEEN :from AND :to")
-    Maybe<List<Racun>> GetRacuniByMonth(Date from, Date to);
+    List<Racun> GetRacuniByMonth(Date from, Date to);
     //##############################################################################################
 }

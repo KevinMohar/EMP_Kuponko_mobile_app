@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.example.test2.Database.Repositories.MesecRepository;
 import com.example.test2.Database.Repositories.RacunRepository;
@@ -53,11 +54,11 @@ public class KuponkoViewModel extends AndroidViewModel {
     //##############################################################################################
 
     //#####################################  QUERY TASKS  ##########################################
-    public Maybe<List<Racun>> getAllRacuns(){return racunRepository.GetAllRacuns();}
-    public Maybe<List<Racun>> getAllRacunsByMonth(Date from, Date to){return racunRepository.GetRacunByDate(from, to);}
-    public Maybe<Racun> getRacunById(int id){return racunRepository.GetRacunById(id);}
-    public Maybe<List<Mesec>> getAllMesec(){return mesecRepository.GetAllMonths();}
-    public Maybe<Mesec> getMonthByDate(Date date){return mesecRepository.GetMonthByDate(date);}
+    public List<Racun> getAllRacuns(){return racunRepository.GetAllRacuns();}
+    public List<Racun> getAllRacunsByMonth(Date from, Date to){return racunRepository.GetRacunByDate(from, to);}
+    public Racun getRacunById(int id){return racunRepository.GetRacunById(id);}
+    public List<Mesec> getAllMesec(){return mesecRepository.GetAllMonths();}
+    public Mesec getMonthByDate(Date date){return mesecRepository.GetMonthByDate(date);}
     public Trgovina getTrgovinaById(int id){return trgovinaRepository.GetStoreById(id);}
     public List<Trgovina> getTrgovinaByName(String name){return trgovinaRepository.GetStoreByName(name);}
     public Trgovina getTrgovinaByNameAndAddress(String name, String address){

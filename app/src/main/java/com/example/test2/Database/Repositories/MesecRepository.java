@@ -3,6 +3,8 @@ package com.example.test2.Database.Repositories;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.test2.Database.ArchitectureComponents.KuponkoDatabase;
 import com.example.test2.Database.ArchitectureComponents.MesecDAO;
 import com.example.test2.Database.Tables.Mesec;
@@ -46,10 +48,10 @@ public class MesecRepository {
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
-    public Maybe<List<Mesec>> GetAllMonths(){
+    public List<Mesec> GetAllMonths(){
         return mesecDAO.GetAllMonths();
     }
-    public Maybe<Mesec> GetMonthByDate(Date date){
+    public Mesec GetMonthByDate(Date date){
         return mesecDAO.GetMonthByDate(date);
     }
     //----------------------------------------------------------------------------------------------

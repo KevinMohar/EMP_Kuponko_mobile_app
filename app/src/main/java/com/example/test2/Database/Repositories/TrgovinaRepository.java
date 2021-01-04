@@ -3,6 +3,8 @@ package com.example.test2.Database.Repositories;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.test2.Database.ArchitectureComponents.KuponkoDatabase;
 import com.example.test2.Database.ArchitectureComponents.TrgovinaDAO;
 import com.example.test2.Database.Tables.Trgovina;
@@ -15,14 +17,9 @@ public class TrgovinaRepository {
 
     private TrgovinaDAO trgovinaDAO;
 
-    private List<Trgovina> allStores;
-
-    private KuponkoDatabase database;
-
     public TrgovinaRepository(Application application){
         KuponkoDatabase database = KuponkoDatabase.getInstance(application);
         trgovinaDAO = database.trgovinaDAO();
-        allStores = (List<Trgovina>) trgovinaDAO.GetAllStores();
     }
 
     //------------------------------------------INSERTS---------------------------------------------
@@ -42,15 +39,15 @@ public class TrgovinaRepository {
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
     public List<Trgovina> GetAllStores(){
-        return allStores;
+        return trgovinaDAO.GetAllStores();
     }
-    public Maybe<Trgovina> GetStoreByNameAndAddress(String name, String address){
+    public Trgovina GetStoreByNameAndAddress(String name, String address){
         return trgovinaDAO.GetStoreByNameAndAddress(name,address);
     }
-    public Maybe<Trgovina> GetStoreById(int id){
+    public Trgovina GetStoreById(int id){
         return trgovinaDAO.GetStoreById(id);
     }
-    public Maybe<List<Trgovina>> GetStoreByName(String name){ return trgovinaDAO.GetStoreByName(name);}
+    public List<Trgovina> GetStoreByName(String name){ return trgovinaDAO.GetStoreByName(name);}
     //----------------------------------------------------------------------------------------------
 
 

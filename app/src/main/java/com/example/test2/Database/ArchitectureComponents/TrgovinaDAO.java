@@ -40,15 +40,15 @@ public interface TrgovinaDAO {
 
     //#####################################  QUERY TASKS  ##########################################
     @Query("SELECT * FROM trgovine")
-    Maybe<List<Trgovina>> GetAllStores();
+    List<Trgovina> GetAllStores();
 
     @Query("SELECT * FROM trgovine WHERE id = :id")
-    Maybe<Trgovina> GetStoreById(int id);
+    Trgovina GetStoreById(int id);
 
     @Query("SELECT * FROM trgovine WHERE ime = :name")
-    Maybe<List<Trgovina>> GetStoreByName(String name);
+    List<Trgovina> GetStoreByName(String name);
 
     @Query("SELECT * FROM trgovine WHERE ime = :name AND Naslov = :address")
-    Maybe<Trgovina> GetStoreByNameAndAddress(String name, String address);
+    Trgovina GetStoreByNameAndAddress(String name, String address);
     //##############################################################################################
 }

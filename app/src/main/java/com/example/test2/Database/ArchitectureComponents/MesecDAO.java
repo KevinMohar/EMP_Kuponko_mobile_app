@@ -1,5 +1,6 @@
 package com.example.test2.Database.ArchitectureComponents;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -40,9 +41,9 @@ public interface MesecDAO {
 
     //#####################################  QUERY TASKS  ##########################################
     @Query("SELECT * FROM meseci")
-    Maybe<List<Mesec>> GetAllMonths();
+    List<Mesec> GetAllMonths();
 
     @Query("SELECT * FROM meseci WHERE datum = :date")
-    Maybe<Mesec> GetMonthByDate(Date date);
+    Mesec GetMonthByDate(Date date);
     //##############################################################################################
 }

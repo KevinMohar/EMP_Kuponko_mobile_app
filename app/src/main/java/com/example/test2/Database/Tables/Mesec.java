@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,15 +47,12 @@ public class Mesec {
         return stroski;
     }
 
-    public void getRacuni(KuponkoViewModel viewModel){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this.datum);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date to = cal.getTime();
-        cal.setTime(this.datum);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date from = cal.getTime();
-        this.racuni = viewModel.getAllRacunsByMonth(from, to);
+    public void setRacuni(ArrayList<Racun> rac){
+        this.racuni = rac;
+    }
+
+    public ArrayList<Racun> getRacuni(){
+        return (ArrayList<Racun>) this.racuni;
     }
 
     public String getDisplayDate(){

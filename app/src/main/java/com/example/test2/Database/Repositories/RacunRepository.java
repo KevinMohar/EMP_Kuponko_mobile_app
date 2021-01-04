@@ -47,13 +47,13 @@ public class RacunRepository {
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
-    public Maybe<List<Racun>> GetAllRacuns(){
+    public List<Racun> GetAllRacuns(){
         return racunDAO.GetAllRacuns();
     }
-    public Maybe<List<Racun>> GetRacunByDate(Date from, Date to){
+    public List<Racun> GetRacunByDate(Date from, Date to){
         return racunDAO.GetRacuniByMonth(from,to);
     }
-    public Maybe<Racun> GetRacunById(int id){
+    public Racun GetRacunById(int id){
         return racunDAO.GetRacunById(id);
     }
     //----------------------------------------------------------------------------------------------

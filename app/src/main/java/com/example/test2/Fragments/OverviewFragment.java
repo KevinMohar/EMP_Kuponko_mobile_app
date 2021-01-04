@@ -44,7 +44,6 @@ public class OverviewFragment extends Fragment {
 
         //viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication())).get(KuponkoViewModel.class);
         viewModel = ViewModelProviders.of(this).get(KuponkoViewModel.class);
-        viewModel.getAllMesec().observeOn();
         meseci = getMonths();
 
         buildRecyclerView(view);
@@ -53,7 +52,6 @@ public class OverviewFragment extends Fragment {
     }
 
     private ArrayList<Mesec> getMonths(){
-        ArrayList<Mesec> meseci = (ArrayList<Mesec>) viewModel.getAllMesec();
         return meseci;
     }
 

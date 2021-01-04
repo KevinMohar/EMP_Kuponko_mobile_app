@@ -36,6 +36,7 @@ public abstract class KuponkoDatabase extends RoomDatabase {
                     KuponkoDatabase.class, "Kuponko_database")
                     .fallbackToDestructiveMigration()               // deletes db on version update
                     .addCallback(roomCallback)
+                    .allowMainThreadQueries()
                     .build();
         }
         return instance;

@@ -75,7 +75,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     public void setRacuni(List<Racun> racuni){
         this.racuni = racuni;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -92,7 +91,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         Racun r = racuni.get(position);
 
         holder.znesekRacuna.setText(String.format("%.2f", r.getZnesek()) +"€");
-        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ r.getTrgovina(viewModel).getIme());
+        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ r.getTrgovina().getIme());
         // TODO: formatiraj datum v lepso obliko
         holder.datumRacuna.setText(r.getDatum().toString());
     }

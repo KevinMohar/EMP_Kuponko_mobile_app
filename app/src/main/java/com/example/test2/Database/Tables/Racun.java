@@ -54,10 +54,12 @@ public class Racun {
         return izdelki;
     }
 
-    public Trgovina getTrgovina(KuponkoViewModel viewModel) {
-        if(trgovina == null)
-            this.trgovina = viewModel.getTrgovinaById(idTrgovine);
-        return trgovina;
+    public Trgovina getTrgovina() {
+        return this.trgovina;
+    }
+
+    public void setTrgovina(Trgovina t){
+        this.trgovina = trgovina;
     }
 
     public int getIdTrgovine() {
