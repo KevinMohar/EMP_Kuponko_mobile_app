@@ -139,12 +139,15 @@ public class HomeFragment extends Fragment {
 
     private void OpenRecipt(int pos){
         // TODO: odpremo pregled racuna
-
     }
 
     private void getCurrentMonth(){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH,cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         Date datum = cal.getTime();
 
         curreentMonth = viewModel.getMonthByDate(datum);

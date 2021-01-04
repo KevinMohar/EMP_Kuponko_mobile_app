@@ -2,6 +2,7 @@ package com.example.test2.Fragments;
 
 import android.app.AlertDialog;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,9 +136,15 @@ public class OverviewFragment extends Fragment {
                 meseci.remove(pos);
                 adapter.notifyItemRemoved(pos);
                 Toast.makeText(getContext(), "Podatki izbrisani", Toast.LENGTH_LONG).show();
+                alertDialog.dismiss();
             }
         });
 
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
 
     }
 
