@@ -11,6 +11,9 @@ import com.example.test2.Database.Tables.Mesec;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Maybe;
+import io.reactivex.Single;
+
 @Dao
 public interface MesecDAO {
 
@@ -37,9 +40,9 @@ public interface MesecDAO {
 
     //#####################################  QUERY TASKS  ##########################################
     @Query("SELECT * FROM meseci")
-    List<Mesec> GetAllMonths();
+    Maybe<List<Mesec>> GetAllMonths();
 
     @Query("SELECT * FROM meseci WHERE datum = :date")
-    Mesec GetMonthByDate(Date date);
+    Maybe<Mesec> GetMonthByDate(Date date);
     //##############################################################################################
 }

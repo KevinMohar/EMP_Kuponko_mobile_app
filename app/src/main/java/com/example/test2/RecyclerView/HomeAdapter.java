@@ -10,16 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
-import com.example.test2.Toolbox.Racun;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
-    private ArrayList<Racun> racuni;
+    private List<Racun> racuni = new ArrayList<>();
     private OnItemClickListener listener;
+    private KuponkoViewModel viewModel;
 
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -71,14 +73,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         }
     }
 
-    public HomeAdapter(ArrayList<Racun> racuni){
+    public void setRacuni(List<Racun> racuni){
         this.racuni = racuni;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recycler_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.home_recycler_item, parent, false);
         HomeViewHolder hvh = new HomeViewHolder(v, listener);
         return hvh;
     }
@@ -87,9 +91,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         Racun r = racuni.get(position);
 
-        holder.znesekRacuna.setText(String.format("%.2f", r.Znesek) +"€");
-        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ r.Trgovina.Ime);
-        holder.datumRacuna.setText(r.getDate());
+        holder.znesekRacuna.setText(String.format("%.2f", r.getZnesek()) +"€");
+        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ r.getTrgovina(viewModel).getIme());
+        // TODO: formatiraj datum v lepso obliko
+        holder.datumRacuna.setText(r.getDatum().toString());
     }
 
     @Override

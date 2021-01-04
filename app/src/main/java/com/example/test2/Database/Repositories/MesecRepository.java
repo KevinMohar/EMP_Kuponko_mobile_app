@@ -6,22 +6,25 @@ import android.os.AsyncTask;
 import com.example.test2.Database.ArchitectureComponents.KuponkoDatabase;
 import com.example.test2.Database.ArchitectureComponents.MesecDAO;
 import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Trgovina;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 public class MesecRepository {
 
     private MesecDAO mesecDAO;
-
-    private List<Mesec>allMonths;
 
     private KuponkoDatabase database;
 
     public MesecRepository(Application application){
         KuponkoDatabase database = KuponkoDatabase.getInstance(application);
         mesecDAO = database.mesecDAO();
-        allMonths = mesecDAO.GetAllMonths();
     }
 
     //------------------------------------------INSERTS---------------------------------------------
@@ -43,10 +46,10 @@ public class MesecRepository {
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
-    public List<Mesec> GetAllMonths(){
-        return allMonths;
+    public Maybe<List<Mesec>> GetAllMonths(){
+        return mesecDAO.GetAllMonths();
     }
-    public Mesec GetMonthByDate(Date date){
+    public Maybe<Mesec> GetMonthByDate(Date date){
         return mesecDAO.GetMonthByDate(date);
     }
     //----------------------------------------------------------------------------------------------

@@ -83,7 +83,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Overvi
     public void onBindViewHolder(@NonNull OverviewViewHolder holder, int position) {
         Mesec m = meseci.get(position);
 
-        holder.mesec.setText(m.getDateString());
+        holder.mesec.setText(m.getDisplayDate());
         holder.stroski.setText(m.getStroski()+"€");
     }
 

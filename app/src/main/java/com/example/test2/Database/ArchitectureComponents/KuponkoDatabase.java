@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.test2.Database.Tables.Mesec;
@@ -14,11 +15,12 @@ import com.example.test2.Database.Tables.Racun;
 import com.example.test2.Database.Tables.Trgovina;
 
 @Database(entities = {Trgovina.class, Racun.class, Mesec.class}, version = 1)
+@TypeConverters({DataConverters.class})
 public abstract class KuponkoDatabase extends RoomDatabase {
 
     private static KuponkoDatabase instance;
 
-    // ----------------------------Vstavi DAO objekte za vse classe---------------------------------
+    // ----------------------------Vstavi DAO objekte za vse tabele---------------------------------
 
     public abstract TrgovinaDAO trgovinaDAO();
 

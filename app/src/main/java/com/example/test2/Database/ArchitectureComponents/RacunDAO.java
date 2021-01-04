@@ -1,6 +1,5 @@
 package com.example.test2.Database.ArchitectureComponents;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -11,6 +10,9 @@ import com.example.test2.Database.Tables.Racun;
 
 import java.util.Date;
 import java.util.List;
+
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 @Dao
 public interface RacunDAO {
@@ -40,12 +42,12 @@ public interface RacunDAO {
 
     //#####################################  QUERY TASKS  ##########################################
     @Query("SELECT * FROM racuni")
-    List<Racun> GetAllRacuns();
+    Maybe<List<Racun>> GetAllRacuns();
 
     @Query("SELECT * FROM racuni WHERE id = :id")
-    Racun GetRacunById(int id);
+    Maybe<Racun> GetRacunById(int id);
 
-    @Query("SELECT * FROM racuni WHERE datum = :date")
-    List<Racun> GetRacuniByMonth(Date date);
+    @Query("SELECT * FROM racuni WHERE datum BETWEEN :from AND :to")
+    Maybe<List<Racun>> GetRacuniByMonth(Date from, Date to);
     //##############################################################################################
 }

@@ -15,6 +15,8 @@ import com.example.test2.Database.Tables.Trgovina;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Maybe;
+
 
 public class KuponkoViewModel extends AndroidViewModel {
     private MesecRepository mesecRepository;
@@ -51,11 +53,12 @@ public class KuponkoViewModel extends AndroidViewModel {
     //##############################################################################################
 
     //#####################################  QUERY TASKS  ##########################################
-    public List<Racun> getAllRacuns(){return racunRepository.GetAllRacuns();}
-    public List<Racun> getAllRacunsByMonth(Date date){return racunRepository.GetRacunByDate(date);}
-    public Racun getRacunById(int id){return racunRepository.GetRacunById(id);}
-    public List<Mesec> getAllMesec(){return mesecRepository.GetAllMonths();}
-    public Mesec getMonthByDate(Date date){return mesecRepository.GetMonthByDate(date);}
+    public Maybe<List<Racun>> getAllRacuns(){return racunRepository.GetAllRacuns();}
+    public Maybe<List<Racun>> getAllRacunsByMonth(Date from, Date to){return racunRepository.GetRacunByDate(from, to);}
+    public Maybe<Racun> getRacunById(int id){return racunRepository.GetRacunById(id);}
+    public Maybe<List<Mesec>> getAllMesec(){return mesecRepository.GetAllMonths();}
+    public Maybe<Mesec> getMonthByDate(Date date){return mesecRepository.GetMonthByDate(date);}
+    public Trgovina getTrgovinaById(int id){return trgovinaRepository.GetStoreById(id);}
     public List<Trgovina> getTrgovinaByName(String name){return trgovinaRepository.GetStoreByName(name);}
     public Trgovina getTrgovinaByNameAndAddress(String name, String address){
         return trgovinaRepository.GetStoreByNameAndAddress(name, address);

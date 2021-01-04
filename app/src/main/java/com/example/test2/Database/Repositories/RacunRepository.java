@@ -14,6 +14,8 @@ import com.example.test2.Database.Tables.Racun;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Maybe;
+
 public class RacunRepository {
 
     private RacunDAO racunDAO;
@@ -45,13 +47,13 @@ public class RacunRepository {
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
-    public List<Racun> GetAllRacuns(){
+    public Maybe<List<Racun>> GetAllRacuns(){
         return racunDAO.GetAllRacuns();
     }
-    public List<Racun> GetRacunByDate(Date date){
-        return racunDAO.GetRacuniByMonth(date);
+    public Maybe<List<Racun>> GetRacunByDate(Date from, Date to){
+        return racunDAO.GetRacuniByMonth(from,to);
     }
-    public Racun GetRacunById(int id){
+    public Maybe<Racun> GetRacunById(int id){
         return racunDAO.GetRacunById(id);
     }
     //----------------------------------------------------------------------------------------------

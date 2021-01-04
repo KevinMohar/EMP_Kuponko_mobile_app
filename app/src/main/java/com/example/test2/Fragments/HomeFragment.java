@@ -2,27 +2,37 @@ package com.example.test2.Fragments;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.Tables.Trgovina;
+import com.example.test2.Database.ViewModels.KuponkoViewModel;
+import com.example.test2.Izdelek;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
-import com.example.test2.Toolbox.Izdelek;
-import com.example.test2.Toolbox.Racun;
-import com.example.test2.Toolbox.Trgovina;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
@@ -34,14 +44,22 @@ public class HomeFragment extends Fragment {
 
     private FloatingActionButton addBtn;
 
-    private SQLiteDatabase database;
+    private KuponkoViewModel viewModel;
 
+    private Mesec mesec;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication())).get(KuponkoViewModel.class);
+        mesec = getCurrentMonth();
         racuni = getRecipts();
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle(mesec.getDisplayDate());
 
         buildRecyclerView(view);
 
@@ -53,46 +71,24 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        DBHelper dbHelper = new DBHelper(this.getContext());
-        database = dbHelper.getWritableDatabase();
-
 
         // pusti na koncu
         return view;
     }
 
     private ArrayList<Racun> getRecipts(){
+
+        //ArrayList<Racun> racuni = viewModel.getAllRacunsByMonth();
         ArrayList<Racun> racuni = new ArrayList<>();
-
-        // TODO: pridobi racune iz baze in nafilaj array
-
-        // FIXME:-------------------------samo za testeranje----------------------------------------
-        racuni.add(new Racun(1, new Trgovina(1, "Mercator", "vehova"), Calendar.getInstance().getTime(), 300, new ArrayList<Izdelek>()));
-        racuni.add(new Racun(2, new Trgovina(2, "Lidl", "asdasd"), Calendar.getInstance().getTime(), 240, new ArrayList<Izdelek>()));
-        // -----------------------------------------------------------------------------------------
-
         return racuni;
     }
 
     public void AddRecipt(){
         // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
 
-        // samo placeholder, taprav racun bo genereran ko slikas neki oz k ga vneses rocno
-        Racun racun = new Racun(1);
-
-        // zapisemo racun v tabelo racun
-        ContentValues cv = new ContentValues();
-        cv.put(RacuniContract.RacunEntry.COLUM_1_NAME, racun.Trgovina.Ime);
-        cv.put(RacuniContract.RacunEntry.COLUM_2_DATUM, racun.getDate());
-        cv.put(RacuniContract.RacunEntry.COLUM_3_ZNESEK, racun.Znesek);
-        database.insert(RacuniContract.RacunEntry.TABLE_NAME, null, cv);
 
         // TODO: v tabeli meseci dodamo racun v seznam racunov trenutnega meseca
 
-
-        // FIXME:-------------------------samo za testeranje----------------------------------------
-        racuni.add(new Racun(3, new Trgovina(2, "Hofer", "neki"), Calendar.getInstance().getTime(), 321, new ArrayList<Izdelek>()));
-        // -----------------------------------------------------------------------------------------
 
         // ostat more nakonc da updatas recycler view
         adapter.notifyItemInserted(racuni.size()-1);
@@ -100,8 +96,8 @@ public class HomeFragment extends Fragment {
 
     public void RemoveRecipt(int pos){
 
-        // TODO: odpre se alert ce hoces zbrisat, ce da --> zbrises racun iz baze in iz seznama
-
+        viewModel.deleteRacun(racuni.get(pos));
+        // TODO: zbrisi racun iz seznma racunov trenutnega meseca
 
         // da updejtas recycler view
         racuni.remove(pos);
@@ -141,6 +137,17 @@ public class HomeFragment extends Fragment {
     private void OpenRecipt(int pos){
         // TODO: odpremo pregled racuna
 
+    }
+
+    private Mesec getCurrentMonth(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        Date datum = cal.getTime();
+        Mesec m = viewModel.getMonthByDate(datum);
+
+        if(m == null)
+            return new Mesec(datum,0);
+        return m;
     }
 
 }

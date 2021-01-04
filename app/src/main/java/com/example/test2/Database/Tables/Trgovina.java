@@ -7,19 +7,23 @@ import androidx.room.PrimaryKey;
 public class Trgovina {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    public int id;
 
     private String ime;
 
-    private String Naslov;
+    private String naslov;
 
     public Trgovina(String ime, String naslov) {
         this.ime = ime;
-        Naslov = naslov;
+        this.naslov = naslov;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getIme() {
@@ -27,6 +31,6 @@ public class Trgovina {
     }
 
     public String getNaslov() {
-        return Naslov;
+        return naslov;
     }
 }

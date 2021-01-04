@@ -13,4 +13,9 @@ public class Izdelek {
         this.kolicina = kolicina;
         this.cena = cena;
     }
+
+    @Override
+    public String toString() {
+        return ime+","+kolicina+","+cena;
+    }
 }

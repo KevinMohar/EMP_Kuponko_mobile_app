@@ -11,6 +11,9 @@ import com.example.test2.Database.Tables.Trgovina;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
+import io.reactivex.Single;
+
 @Dao
 public interface TrgovinaDAO {
 
@@ -37,12 +40,15 @@ public interface TrgovinaDAO {
 
     //#####################################  QUERY TASKS  ##########################################
     @Query("SELECT * FROM trgovine")
-    List<Trgovina> GetAllStores();
+    Maybe<List<Trgovina>> GetAllStores();
+
+    @Query("SELECT * FROM trgovine WHERE id = :id")
+    Maybe<Trgovina> GetStoreById(int id);
 
     @Query("SELECT * FROM trgovine WHERE ime = :name")
-    List<Trgovina> GetStoreByName(String name);
+    Maybe<List<Trgovina>> GetStoreByName(String name);
 
     @Query("SELECT * FROM trgovine WHERE ime = :name AND Naslov = :address")
-    Trgovina GetStoreByNameAndAddress(String name, String address);
+    Maybe<Trgovina> GetStoreByNameAndAddress(String name, String address);
     //##############################################################################################
 }

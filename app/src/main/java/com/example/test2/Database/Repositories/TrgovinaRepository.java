@@ -4,13 +4,12 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.example.test2.Database.ArchitectureComponents.KuponkoDatabase;
-import com.example.test2.Database.ArchitectureComponents.MesecDAO;
 import com.example.test2.Database.ArchitectureComponents.TrgovinaDAO;
-import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.Database.Tables.Trgovina;
 
-import java.util.Date;
 import java.util.List;
+
+import io.reactivex.Maybe;
 
 public class TrgovinaRepository {
 
@@ -23,7 +22,7 @@ public class TrgovinaRepository {
     public TrgovinaRepository(Application application){
         KuponkoDatabase database = KuponkoDatabase.getInstance(application);
         trgovinaDAO = database.trgovinaDAO();
-        allStores = trgovinaDAO.GetAllStores();
+        allStores = (List<Trgovina>) trgovinaDAO.GetAllStores();
     }
 
     //------------------------------------------INSERTS---------------------------------------------
@@ -45,10 +44,13 @@ public class TrgovinaRepository {
     public List<Trgovina> GetAllStores(){
         return allStores;
     }
-    public Trgovina GetStoreByNameAndAddress(String name, String address){
+    public Maybe<Trgovina> GetStoreByNameAndAddress(String name, String address){
         return trgovinaDAO.GetStoreByNameAndAddress(name,address);
     }
-    public List<Trgovina> GetStoreByName(String name){ return trgovinaDAO.GetStoreByName(name);}
+    public Maybe<Trgovina> GetStoreById(int id){
+        return trgovinaDAO.GetStoreById(id);
+    }
+    public Maybe<List<Trgovina>> GetStoreByName(String name){ return trgovinaDAO.GetStoreByName(name);}
     //----------------------------------------------------------------------------------------------
 
 
