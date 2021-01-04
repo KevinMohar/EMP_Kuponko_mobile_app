@@ -1,7 +1,6 @@
 package com.example.test2.Fragments;
 
 import android.app.AlertDialog;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,12 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Mesec;
-import com.example.test2.Database.Tables.Racun;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.OverviewAdapter;
@@ -29,9 +26,6 @@ import com.example.test2.RecyclerView.OverviewAdapter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
-import io.reactivex.Scheduler;
 
 public class OverviewFragment extends Fragment {
 
@@ -77,11 +71,7 @@ public class OverviewFragment extends Fragment {
         adapter.setOnItemClickListener(new OverviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                viewRecipt();
-
-                // FIXME:-------------------------samo za testeranje----------------------------------------
-                Toast.makeText(view.getContext(), "Izbran mesec "+(position+1), Toast.LENGTH_LONG).show();
-                // -----------------------------------------------------------------------------------------
+                viewMonth(position);
             }
 
             @Override
@@ -91,8 +81,18 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    private void viewRecipt(){
-        // TODO: odpre pregled racuna v novem fragmentu;
+    private void viewMonth(int pos){
+        // TODO: odpre pregled meseca v novem fragmentu;
+
+        ReciptOverviewFragment fragment = new ReciptOverviewFragment();
+        Bundle args = new Bundle();
+        args.putInt("idMeseca", meseci.get(pos).getId());
+        fragment.setArguments(args);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack("tag")
+                .commit();
+
     }
 
     public void RemoveMesec(final int pos){

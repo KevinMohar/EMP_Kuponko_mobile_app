@@ -6,6 +6,7 @@
 
     <string name="alert_dialog_warning_title">Ali želite izbrisati podatke?</string>
     <string name="alert_dialog_warning_description">Vsi podatki o mesecu, vključno z računi tega meseca bodo izbrisani!</string>
+    <string name="alert_dialog_warning_description_racuni">Vsi podatki o računu bodo izbrisani!</string>
     <string name="alert_dialog_btn_true">DA</string>
     <string name="alert_dialog_btn_false">NE</string>
 </resources>

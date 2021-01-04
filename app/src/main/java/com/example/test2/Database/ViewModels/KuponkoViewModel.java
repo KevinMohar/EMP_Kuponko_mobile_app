@@ -59,6 +59,7 @@ public class KuponkoViewModel extends AndroidViewModel {
     public Racun getRacunById(int id){return racunRepository.GetRacunById(id);}
     public List<Mesec> getAllMesec(){return mesecRepository.GetAllMonths();}
     public Mesec getMonthByDate(Date date){return mesecRepository.GetMonthByDate(date);}
+    public Mesec getMonthById(int id){return mesecRepository.GetMonthById(id);}
     public Trgovina getTrgovinaById(int id){return trgovinaRepository.GetStoreById(id);}
     public List<Trgovina> getTrgovinaByName(String name){return trgovinaRepository.GetStoreByName(name);}
     public Trgovina getTrgovinaByNameAndAddress(String name, String address){

@@ -54,6 +54,9 @@ public class MesecRepository {
     public Mesec GetMonthByDate(Date date){
         return mesecDAO.GetMonthByDate(date);
     }
+    public Mesec GetMonthById(int id){
+        return mesecDAO.GetMonthById(id);
+    }
     //----------------------------------------------------------------------------------------------
 
 
