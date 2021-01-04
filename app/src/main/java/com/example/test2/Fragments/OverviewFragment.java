@@ -10,11 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.OverviewAdapter;
 
@@ -27,16 +29,17 @@ public class OverviewFragment extends Fragment {
     private RecyclerView recyclerView;
     private OverviewAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
     private ArrayList<Mesec> meseci;
 
-    private SQLiteDatabase database;
+    private KuponkoViewModel viewModel;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pregled, container, false);
+
+        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication())).get(KuponkoViewModel.class);
 
         meseci = getMonths();
 
@@ -46,14 +49,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private ArrayList<Mesec> getMonths(){
-        ArrayList<Mesec> meseci = new ArrayList<>();
-
-        // TODO: pridobi mesece iz database;
-
-        // FIXME:-------------------------samo za testeranje----------------------------------------
-            meseci.add(new Mesec(Calendar.getInstance().getTime(), 300, new ArrayList<Racun>()));
-        // -----------------------------------------------------------------------------------------
-
+        ArrayList<Mesec> meseci = (ArrayList<Mesec>) viewModel.getAllMesec();
         return meseci;
     }
 

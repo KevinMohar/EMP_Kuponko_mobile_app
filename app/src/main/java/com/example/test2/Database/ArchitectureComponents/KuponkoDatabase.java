@@ -1,4 +1,4 @@
-package com.example.test2.Database.ArhitectureComponents;
+package com.example.test2.Database.ArchitectureComponents;
 
 import android.content.Context;
 import android.os.AsyncTask;

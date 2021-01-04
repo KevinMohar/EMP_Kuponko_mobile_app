@@ -5,110 +5,97 @@ import android.os.AsyncTask;
 
 import com.example.test2.Database.ArchitectureComponents.KuponkoDatabase;
 import com.example.test2.Database.ArchitectureComponents.MesecDAO;
+import com.example.test2.Database.ArchitectureComponents.TrgovinaDAO;
 import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Trgovina;
 
 import java.util.Date;
 import java.util.List;
 
-public class MesecRepository {
+public class TrgovinaRepository {
 
-    private MesecDAO mesecDAO;
+    private TrgovinaDAO trgovinaDAO;
 
-    private List<Mesec>allMonths;
+    private List<Trgovina> allStores;
 
     private KuponkoDatabase database;
 
-    public MesecRepository(Application application){
+    public TrgovinaRepository(Application application){
         KuponkoDatabase database = KuponkoDatabase.getInstance(application);
-        mesecDAO = database.mesecDAO();
-        allMonths = mesecDAO.GetAllMonths();
+        trgovinaDAO = database.trgovinaDAO();
+        allStores = trgovinaDAO.GetAllStores();
     }
 
     //------------------------------------------INSERTS---------------------------------------------
-    public void Insert(Mesec mesec){
-        new InsertMesecAsyncTask(mesecDAO).execute(mesec);
+    public void Insert(Trgovina trgovina){
+        new InsertStoreAsyncTask(trgovinaDAO).execute(trgovina);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------UPDATES---------------------------------------------
-    public void Update(Mesec mesec){
-        new UpdateMesecAsyncTask(mesecDAO).execute(mesec);
+    public void Update(Trgovina trgovina){
+        new UpdateStoreAsyncTask(trgovinaDAO).execute(trgovina);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------DELETES---------------------------------------------
-    public void Delete(Mesec mesec){
-        new DeleteMesecAsyncTask(mesecDAO).execute(mesec);
-    }
-    public void DeleteAll(){
-        new DeleteAllMesecAsyncTask(mesecDAO).execute();
+    public void Delete(Trgovina trgovina){
+        new DeleteStoreAsyncTask(trgovinaDAO).execute(trgovina);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
-    public List<Mesec> GetAllMonths(){
-        return allMonths;
+    public List<Trgovina> GetAllStores(){
+        return allStores;
     }
-    public Mesec GetMonthByDate(Date date){
-        return mesecDAO.GetMonthByDate(date);
+    public Trgovina GetStoreByNameAndAddress(String name, String address){
+        return trgovinaDAO.GetStoreByNameAndAddress(name,address);
     }
+    public List<Trgovina> GetStoreByName(String name){ return trgovinaDAO.GetStoreByName(name);}
     //----------------------------------------------------------------------------------------------
 
 
     // AsyncTask je opuscen, zamenjaj s cim drugim
     //#####################################  INSERT TASKS  #########################################
-    private static class InsertMesecAsyncTask extends AsyncTask<Mesec, Void, Void>{
-        private MesecDAO mesecDAO;
+    private static class InsertStoreAsyncTask extends AsyncTask<Trgovina, Void, Void>{
+        private TrgovinaDAO trgovinaDAO;
 
-        private InsertMesecAsyncTask(MesecDAO mesecDAO){
-            this.mesecDAO = mesecDAO;
+        private InsertStoreAsyncTask(TrgovinaDAO trgovinaDAO){
+            this.trgovinaDAO = trgovinaDAO;
         }
 
         @Override
-        protected Void doInBackground(Mesec... mesecs) {
-            mesecDAO.Insert(mesecs[0]);
+        protected Void doInBackground(Trgovina... trgovinas) {
+            trgovinaDAO.Insert(trgovinas[0]);
             return null;
         }
     }
     //##############################################################################################
 
     //#####################################  UPDATE TASKS  #########################################
-    private static class UpdateMesecAsyncTask extends AsyncTask<Mesec, Void, Void>{
-        private MesecDAO mesecDAO;
+    private static class UpdateStoreAsyncTask extends AsyncTask<Trgovina, Void, Void>{
+        private TrgovinaDAO trgovinaDAO;
 
-        private UpdateMesecAsyncTask(MesecDAO mesecDAO){
-            this.mesecDAO = mesecDAO;
+        private UpdateStoreAsyncTask(TrgovinaDAO trgovinaDAO){
+            this.trgovinaDAO = trgovinaDAO;
         }
 
         @Override
-        protected Void doInBackground(Mesec... mesecs) {
-            mesecDAO.Update(mesecs[0]);
+        protected Void doInBackground(Trgovina... trgovinas) {
+            trgovinaDAO.Update(trgovinas[0]);
             return null;
         }
     }
     //##############################################################################################
 
     //#####################################  DELETE TASKS  #########################################
-    private static class DeleteMesecAsyncTask extends AsyncTask<Mesec, Void, Void>{
-        private MesecDAO mesecDAO;
+    private static class DeleteStoreAsyncTask extends AsyncTask<Trgovina, Void, Void>{
+        private TrgovinaDAO trgovinaDAO;
 
-        private DeleteMesecAsyncTask(MesecDAO mesecDAO){
-            this.mesecDAO = mesecDAO;
+        private DeleteStoreAsyncTask(TrgovinaDAO trgovinaDAO){
+            this.trgovinaDAO = trgovinaDAO;
         }
 
         @Override
-        protected Void doInBackground(Mesec... mesecs) {
-            mesecDAO.Delete(mesecs[0]);
-            return null;
-        }
-    }
-    private static class DeleteAllMesecAsyncTask extends AsyncTask<Void, Void, Void>{
-        private MesecDAO mesecDAO;
-
-        private DeleteAllMesecAsyncTask(MesecDAO mesecDAO){
-            this.mesecDAO = mesecDAO;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            mesecDAO.DeleteAllMonths();
+        protected Void doInBackground(Trgovina... trgovinas) {
+            trgovinaDAO.Delete(trgovinas[0]);
             return null;
         }
     }
