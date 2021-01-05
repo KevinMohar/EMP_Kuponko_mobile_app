@@ -18,13 +18,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Racun;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ReciptOverviewFragment extends Fragment {
@@ -33,11 +38,13 @@ public class ReciptOverviewFragment extends Fragment {
 
     private FloatingActionButton addBtn;
     private KuponkoViewModel viewModel;
-    private Mesec curreentMonth;
+    private Mesec currentMonth;
 
     private RecyclerView recyclerView;
     private HomeAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private GraphView graphView;
 
     @Nullable
     @Override
@@ -49,6 +56,9 @@ public class ReciptOverviewFragment extends Fragment {
         getDate();
         setTitleText();
 
+        graphView = RootView.findViewById(R.id.home_graph);
+        GraphData();
+
         addBtn = RootView.findViewById(R.id.home_fragment_add);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +66,8 @@ public class ReciptOverviewFragment extends Fragment {
                 AddRecipt();
             }
         });
+
+        buildRecyclerView(RootView);
 
         return RootView;
     }
@@ -68,7 +80,7 @@ public class ReciptOverviewFragment extends Fragment {
 
 
         // ostat more nakonc da updatas recycler view
-        adapter.notifyItemInserted(curreentMonth.getRacuni().size()-1);
+        adapter.notifyItemInserted(currentMonth.getRacuni().size()-1);
     }
 
     private void buildViewModel(){
@@ -81,7 +93,7 @@ public class ReciptOverviewFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
         adapter = new HomeAdapter();
-        adapter.setRacuni(curreentMonth.getRacuni());
+        adapter.setRacuni(currentMonth.getRacuni());
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -138,8 +150,8 @@ public class ReciptOverviewFragment extends Fragment {
         view.findViewById(R.id.alert_dialog_true_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.deleteRacun(curreentMonth.getRacuni().get(pos));
-                curreentMonth.getRacuni().remove(pos);
+                viewModel.deleteRacun(currentMonth.getRacuni().get(pos));
+                currentMonth.getRacuni().remove(pos);
                 // da updejtas recycler view
                 adapter.notifyItemRemoved(pos);
                 Toast.makeText(getContext(), "Podatki izbrisani", Toast.LENGTH_LONG).show();
@@ -151,15 +163,45 @@ public class ReciptOverviewFragment extends Fragment {
     private void getDate(){
         if(getArguments() != null){
             int id = getArguments().getInt("idMeseca");
-            curreentMonth = viewModel.getMonthById(id);
+            currentMonth = viewModel.getMonthById(id);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH,cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+            Date from = cal.getTime();
+            cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+            Date to = cal.getTime();
+            currentMonth.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(from,to));
         }
     }
 
     private void setTitleText(){
         TextView homeMesec = RootView.findViewById(R.id.home_mesec);
-        homeMesec.setText(curreentMonth.getDisplayDate());
+        homeMesec.setText(currentMonth.getDisplayDate());
 
         TextView stroski = RootView.findViewById(R.id.home_stroski);
-        stroski.setText("STROŠKI: " + curreentMonth.getStroski()+"€");
+        stroski.setText("STROŠKI: " + currentMonth.getStroski()+"€");
+    }
+
+    private void GraphData(){
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentMonth.getDatum());
+        float stroski;
+        for(int i = 1; i <=  cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+            stroski = currentMonth.getStroskiByDay(i);
+            if(stroski != 0)
+                series.appendData(new DataPoint(i,stroski),true,31);
+        }
+        graphView.addSeries(series);
+        graphView.getViewport().setMinX(1);
+        graphView.getViewport().setMaxX(currentMonth.getLastDayOfMonth());
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(12);
+        graphView.getViewport().setXAxisBoundsManual(true);
+        GridLabelRenderer glr = graphView.getGridLabelRenderer();
+        glr.setVerticalAxisTitle("Stroški €");
+        glr.setHorizontalAxisTitle("Dan v mesecu");
+        glr.setVerticalAxisTitleTextSize(45);
+        glr.setPadding(80);
+        glr.setNumHorizontalLabels(7);
     }
 }

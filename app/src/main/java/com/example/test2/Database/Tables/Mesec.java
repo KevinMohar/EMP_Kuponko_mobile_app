@@ -105,4 +105,22 @@ public class Mesec {
         dateForDisplay+=" "+year;
         return dateForDisplay;
     }
+
+    public float getStroskiByDay(int dan){
+        float strosek = 0;
+        Calendar cal = Calendar.getInstance();
+        for(Racun r : racuni){
+            cal.setTime(r.getDatum());
+            if(cal.get(Calendar.DAY_OF_MONTH) == dan){
+                strosek+=r.getZnesek();
+            }
+        }
+        return strosek;
+    }
+
+    public int getLastDayOfMonth(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(datum);
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
 }

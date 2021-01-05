@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +25,10 @@ import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,7 +46,9 @@ public class HomeFragment extends Fragment {
 
     private KuponkoViewModel viewModel;
 
-    private Mesec curreentMonth;
+    private Mesec currentMonth;
+
+    private GraphView graphView;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
@@ -59,7 +63,8 @@ public class HomeFragment extends Fragment {
 
         setTitleText();
 
-
+        graphView = RootView.findViewById(R.id.home_graph);
+        GraphData();
 
         addBtn = RootView.findViewById(R.id.home_fragment_add);
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +81,7 @@ public class HomeFragment extends Fragment {
 
     private void getRecipts(){
         Calendar cal = Calendar.getInstance();
-        cal.setTime(curreentMonth.getDatum());
+        cal.setTime(currentMonth.getDatum());
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -86,7 +91,7 @@ public class HomeFragment extends Fragment {
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date to = cal.getTime();
 
-        curreentMonth.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(from, to));
+        currentMonth.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(from, to));
     }
 
     public void AddRecipt(){
@@ -95,7 +100,7 @@ public class HomeFragment extends Fragment {
 
 
         // ostat more nakonc da updatas recycler view
-        adapter.notifyItemInserted(curreentMonth.getRacuni().size()-1);
+        adapter.notifyItemInserted(currentMonth.getRacuni().size()-1);
     }
 
     public void RemoveRecipt(final int pos){
@@ -125,8 +130,8 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.alert_dialog_true_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.deleteRacun(curreentMonth.getRacuni().get(pos));
-                curreentMonth.getRacuni().remove(pos);
+                viewModel.deleteRacun(currentMonth.getRacuni().get(pos));
+                currentMonth.getRacuni().remove(pos);
                 // da updejtas recycler view
                 adapter.notifyItemRemoved(pos);
                 Toast.makeText(getContext(), "Podatki izbrisani", Toast.LENGTH_LONG).show();
@@ -140,7 +145,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
         adapter = new HomeAdapter();
-        adapter.setRacuni(curreentMonth.getRacuni());
+        adapter.setRacuni(currentMonth.getRacuni());
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -183,21 +188,49 @@ public class HomeFragment extends Fragment {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date datum = cal.getTime();
-
-        curreentMonth = viewModel.getMonthByDate(datum);
-        if(curreentMonth == null){
-            curreentMonth = new Mesec(datum, 0);
-            viewModel.insertMesec(curreentMonth);
+        cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date to = cal.getTime();
+        currentMonth = viewModel.getMonthByDate(datum);
+        if(currentMonth == null){
+            currentMonth = new Mesec(datum, 0);
+            currentMonth.setRacuni(new ArrayList<Racun>());
+            viewModel.insertMesec(currentMonth);
+        }else {
+            currentMonth.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(datum,to));
         }
 
     }
 
     private void setTitleText(){
         TextView homeMesec = RootView.findViewById(R.id.home_mesec);
-        homeMesec.setText(curreentMonth.getDisplayDate());
+        homeMesec.setText(currentMonth.getDisplayDate());
 
         TextView stroski = RootView.findViewById(R.id.home_stroski);
-        stroski.setText("STROŠKI: " + curreentMonth.getStroski()+"€");
+        stroski.setText("STROŠKI: " + currentMonth.getStroski()+"€");
+    }
+
+    private void GraphData(){
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentMonth.getDatum());
+        float stroski;
+        for(int i = 1; i <=  cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+            stroski = currentMonth.getStroskiByDay(i);
+            if(stroski != 0)
+                series.appendData(new DataPoint(i,stroski),true,31);
+        }
+        graphView.addSeries(series);
+        graphView.getViewport().setMinX(1);
+        graphView.getViewport().setMaxX(currentMonth.getLastDayOfMonth());
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(12);
+        graphView.getViewport().setXAxisBoundsManual(true);
+        GridLabelRenderer glr = graphView.getGridLabelRenderer();
+        glr.setVerticalAxisTitle("Stroški €");
+        glr.setHorizontalAxisTitle("Dan v mesecu");
+        glr.setVerticalAxisTitleTextSize(45);
+        glr.setPadding(80);
+        glr.setNumHorizontalLabels(7);
     }
 
 }
