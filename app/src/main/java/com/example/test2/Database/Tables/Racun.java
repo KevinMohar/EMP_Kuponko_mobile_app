@@ -59,7 +59,7 @@ public class Racun {
     }
 
     public void setTrgovina(Trgovina t){
-        this.trgovina = trgovina;
+        this.trgovina = t;
     }
 
     public int getIdTrgovine() {

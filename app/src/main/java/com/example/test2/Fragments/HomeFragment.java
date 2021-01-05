@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
+import com.example.test2.Izdelek;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -216,7 +219,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void OpenRecipt(int pos){
-        // TODO: odpremo pregled racuna
+        // TODO: odpri pregled racuna
     }
 
     private void getCurrentMonth(){
@@ -279,6 +282,47 @@ public class HomeFragment extends Fragment {
 
     private void VstaviRacunRocno(){
         // TODO: odpres obrazec za rocno vstavljanje
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        final View view = LayoutInflater.from(RootView.getContext())
+                .inflate(R.layout.alert_dialog_new_racun, (ConstraintLayout) getActivity()
+                        .findViewById(R.id.alert_dialog_new_racun));
+        builder.setView(view);
+
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.alert_dialog_new_racun_naprej).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: preveri ce so vsi inputi povni --> posli podatke v pregled racuna
+
+                EditText trgovina = view.findViewById(R.id.alert_dialog_new_racun_trgovina);
+                EditText naslov = view.findViewById(R.id.alert_dialog_new_racun_naslov);
+
+                if(trgovina.getText().toString().trim().length() != 0
+                        && naslov.getText().toString().trim().length() != 0 ){
+
+                    RacunOverviewFragment fragment = new RacunOverviewFragment();
+                    Bundle args = new Bundle();
+                    args.putString("racun_trgovina", trgovina.getText().toString().trim());
+                    args.putString("racun_naslov", naslov.getText().toString().trim());
+                    fragment.setArguments(args);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack("tag3")
+                            .commit();
+                    alertDialog.dismiss();
+                }else {
+                    Toast.makeText(getContext(), "Vpišite vsa polja", Toast.LENGTH_LONG);
+                }
+
+            }
+        });
+
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
     }
 
 }

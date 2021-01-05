@@ -24,12 +24,12 @@ public class TrgovinaRepository {
 
     //------------------------------------------INSERTS---------------------------------------------
     public void Insert(Trgovina trgovina){
-        new InsertStoreAsyncTask(trgovinaDAO).execute(trgovina);
+       trgovinaDAO.Insert(trgovina);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------UPDATES---------------------------------------------
     public void Update(Trgovina trgovina){
-        new UpdateStoreAsyncTask(trgovinaDAO).execute(trgovina);
+        trgovinaDAO.Update(trgovina);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------DELETES---------------------------------------------
@@ -53,35 +53,11 @@ public class TrgovinaRepository {
 
     // AsyncTask je opuscen, zamenjaj s cim drugim
     //#####################################  INSERT TASKS  #########################################
-    private static class InsertStoreAsyncTask extends AsyncTask<Trgovina, Void, Void>{
-        private TrgovinaDAO trgovinaDAO;
 
-        private InsertStoreAsyncTask(TrgovinaDAO trgovinaDAO){
-            this.trgovinaDAO = trgovinaDAO;
-        }
-
-        @Override
-        protected Void doInBackground(Trgovina... trgovinas) {
-            trgovinaDAO.Insert(trgovinas[0]);
-            return null;
-        }
-    }
     //##############################################################################################
 
     //#####################################  UPDATE TASKS  #########################################
-    private static class UpdateStoreAsyncTask extends AsyncTask<Trgovina, Void, Void>{
-        private TrgovinaDAO trgovinaDAO;
 
-        private UpdateStoreAsyncTask(TrgovinaDAO trgovinaDAO){
-            this.trgovinaDAO = trgovinaDAO;
-        }
-
-        @Override
-        protected Void doInBackground(Trgovina... trgovinas) {
-            trgovinaDAO.Update(trgovinas[0]);
-            return null;
-        }
-    }
     //##############################################################################################
 
     //#####################################  DELETE TASKS  #########################################

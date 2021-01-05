@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.Izdelek;
 import com.example.test2.R;
@@ -22,6 +23,7 @@ import com.example.test2.RecyclerView.RacunOverviewAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class RacunOverviewFragment extends Fragment {
 
@@ -46,7 +48,7 @@ public class RacunOverviewFragment extends Fragment {
         GetData();
         SetRacunInfo();
         buildRecyclerView(RootView);
-        addBtn = RootView.findViewById(R.id.home_fragment_add);
+        addBtn = RootView.findViewById(R.id.racun_overview_add_item_btn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,8 +118,22 @@ public class RacunOverviewFragment extends Fragment {
     private void GetData(){
         // TODO: pridobi id racuna iz bundla in ga prebere iz baze
         if(getArguments() != null) {
-            int id = getArguments().getInt("idRacuna");
-            racun = viewModel.getRacunById(id);
+            if(getArguments().containsKey("idRacuna")){
+                int id = getArguments().getInt("idRacuna");
+                racun = viewModel.getRacunById(id);
+                return;
+            }
+            String trgovina = getArguments().getString("racun_trgovina");
+            String naslov = getArguments().getString("racun_naslov");
+
+            Trgovina t = viewModel.getTrgovinaByNameAndAddress(trgovina, naslov);
+            if(t == null){
+                viewModel.insertTrgovina(new Trgovina(trgovina,naslov));
+            }
+            t = viewModel.getTrgovinaByNameAndAddress(trgovina, naslov);
+
+            racun = new Racun(Calendar.getInstance().getTime(), t.getId(), 0, new ArrayList<Izdelek>());
+            racun.setTrgovina(t);
         }
     }
 }
