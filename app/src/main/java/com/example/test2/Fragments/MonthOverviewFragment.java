@@ -123,25 +123,25 @@ public class MonthOverviewFragment extends Fragment {
                 .inflate(R.layout.alert_dialog_warning, (ConstraintLayout) getActivity()
                         .findViewById(R.id.alert_dialog_warning));
         builder.setView(view);
-        ((TextView) view.findViewById(R.id.alert_dialog_warning_title))
+        ((TextView) view.findViewById(R.id.alert_dialog_insert_title))
                 .setText(getResources().getString(R.string.alert_dialog_warning_title));
         ((TextView) view.findViewById(R.id.alert_dialog_warning_description))
                 .setText(getResources().getString(R.string.alert_dialog_warning_description_racuni));
-        ((Button) view.findViewById(R.id.alert_dialog_false_btn))
+        ((Button) view.findViewById(R.id.alert_dialog_ročno_btn))
                 .setText(getResources().getString(R.string.alert_dialog_btn_false));
-        ((Button) view.findViewById(R.id.alert_dialog_true_btn))
+        ((Button) view.findViewById(R.id.alert_dialog_slika_btn))
                 .setText(getResources().getString(R.string.alert_dialog_btn_true));
 
         final AlertDialog alertDialog = builder.create();
 
-        view.findViewById(R.id.alert_dialog_false_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.alert_dialog_ročno_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
             }
         });
 
-        view.findViewById(R.id.alert_dialog_true_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.alert_dialog_slika_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewModel.deleteRacun(currentMonth.getRacuni().get(pos));

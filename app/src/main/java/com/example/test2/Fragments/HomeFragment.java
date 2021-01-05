@@ -1,6 +1,7 @@
 package com.example.test2.Fragments;
 
 import android.app.AlertDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -95,12 +96,44 @@ public class HomeFragment extends Fragment {
     }
 
     public void AddRecipt(){
-        // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
-        // TODO: ali odpres galerijo --> izberes fotko --> croppas --> dodas racun v bazo --> dodas racun v array
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(RootView.getContext())
+                .inflate(R.layout.alert_dialog_insert_racun, (ConstraintLayout) getActivity()
+                        .findViewById(R.id.alert_dialog_insert));
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.alert_dialog_insert_title))
+                .setText(getResources().getString(R.string.alert_dialog_insert_title));
+        ((Button) view.findViewById(R.id.alert_dialog_ročno_btn))
+                .setText(getResources().getString(R.string.alert_dialog_insert_manual_btn));
+        ((Button) view.findViewById(R.id.alert_dialog_slika_btn))
+                .setText(getResources().getString(R.string.alert_dialog_insert_slika_btn));
 
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.alert_dialog_ročno_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VstaviRacunRocno();
+                alertDialog.dismiss();
+            }
+        });
+
+        view.findViewById(R.id.alert_dialog_slika_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VstaviRacunKotSliko();
+                alertDialog.dismiss();
+            }
+        });
+
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
 
         // ostat more nakonc da updatas recycler view
-        adapter.notifyItemInserted(currentMonth.getRacuni().size()-1);
+        //adapter.notifyItemInserted(currentMonth.getRacuni().size()-1);
     }
 
     public void RemoveRecipt(final int pos){
@@ -138,6 +171,12 @@ public class HomeFragment extends Fragment {
                 alertDialog.dismiss();
             }
         });
+
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
     }
 
     private void buildRecyclerView(final View view){
@@ -231,6 +270,15 @@ public class HomeFragment extends Fragment {
         glr.setVerticalAxisTitleTextSize(45);
         glr.setPadding(80);
         glr.setNumHorizontalLabels(7);
+    }
+
+    private void VstaviRacunKotSliko(){
+        // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
+        // TODO: ali odpres galerijo --> izberes fotko --> croppas --> dodas racun v bazo --> dodas racun v array
+    }
+
+    private void VstaviRacunRocno(){
+        // TODO: odpres obrazec za rocno vstavljanje
     }
 
 }

@@ -9,4 +9,8 @@
     <string name="alert_dialog_warning_description_racuni">Vsi podatki o računu bodo izbrisani!</string>
     <string name="alert_dialog_btn_true">DA</string>
     <string name="alert_dialog_btn_false">NE</string>
+
+    <string name="alert_dialog_insert_title">Kako želite vstaviti račun?</string>
+    <string name="alert_dialog_insert_manual_btn">ROČNO</string>
+    <string name="alert_dialog_insert_slika_btn">SLIKA</string>
 </resources>
