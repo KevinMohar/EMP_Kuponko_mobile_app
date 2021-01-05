@@ -84,7 +84,7 @@ public class OverviewFragment extends Fragment {
     private void viewMonth(int pos){
         // TODO: odpre pregled meseca v novem fragmentu;
 
-        ReciptOverviewFragment fragment = new ReciptOverviewFragment();
+        MonthOverviewFragment fragment = new MonthOverviewFragment();
         Bundle args = new Bundle();
         args.putInt("idMeseca", meseci.get(pos).getId());
         fragment.setArguments(args);

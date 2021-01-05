@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ReciptOverviewFragment extends Fragment {
+public class MonthOverviewFragment extends Fragment {
 
     private View RootView;
 
@@ -75,7 +75,8 @@ public class ReciptOverviewFragment extends Fragment {
 
 
     public void AddRecipt(){
-        // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
+        // TODO: odpres alert dialog za dodajanje racuna --> dodaas rocno
+        // TODO: ali odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
         // TODO: ali odpres galerijo --> izberes fotko --> croppas --> dodas racun v bazo --> dodas racun v array
 
 
@@ -102,19 +103,12 @@ public class ReciptOverviewFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 OpenRecipt(position);
-
-                // FIXME:-------------------------samo za testeranje----------------------------------------
-                Toast.makeText(view.getContext(), "Izbran račun "+(position+1), Toast.LENGTH_LONG).show();
-                // -----------------------------------------------------------------------------------------
             }
 
             @Override
             public void onDeleteClick(int position) {
                 RemoveRecipt(position);
-
-                // FIXME:-------------------------samo za testeranje----------------------------------------
                 Toast.makeText(view.getContext(), "Račun izbrisan", Toast.LENGTH_LONG).show();
-                // -----------------------------------------------------------------------------------------
             }
         });
     }
