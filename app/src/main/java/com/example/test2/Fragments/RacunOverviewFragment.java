@@ -222,6 +222,7 @@ public class RacunOverviewFragment extends Fragment {
 
             racun = new Racun(Calendar.getInstance().getTime(), t.getId(), 0, new ArrayList<Izdelek>());
             racun.setTrgovina(t);
+            viewModel.insertRacun(racun);
         }
     }
 }

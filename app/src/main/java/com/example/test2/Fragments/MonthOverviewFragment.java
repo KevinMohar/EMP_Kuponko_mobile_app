@@ -127,6 +127,7 @@ public class MonthOverviewFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
         adapter = new HomeAdapter();
         adapter.setRacuni(currentMonth.getRacuni());
+        adapter.setViewModel(viewModel);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

@@ -4,7 +4,10 @@ import androidx.room.TypeConverter;
 
 import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Izdelek;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,22 +24,15 @@ public class DataConverters {
     }
 
     @TypeConverter
-    public static String izdelkiToString(List<Izdelek> izdelki) {
-        StringBuilder sb = new StringBuilder();
-        for(Izdelek i : izdelki){
-            sb.append(i.toString()+";");
-        }
-        return sb.toString();
+    public static List<Izdelek> stringToIzdelki(String value) {
+        Type listType = new TypeToken<List<Izdelek>>() {}.getType();
+        return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static List<Izdelek> stringToIzdelki(String izdelkiStr) {
-        List<Izdelek> izdelki = new ArrayList<>();
-        String[] tmp = izdelkiStr.split(";");
-        for(String i : tmp){
-            String[] a = i.split(",");
-            izdelki.add(new Izdelek(a[0], Integer.parseInt(a[1]), Float.parseFloat(a[2])));
-        }
-        return izdelki;
+    public static String izdelkiToString(List<Izdelek> izdelki) {
+        Gson gson = new Gson();
+        String json = gson.toJson(izdelki);
+        return json;
     }
 }

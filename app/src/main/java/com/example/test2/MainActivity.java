@@ -66,21 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .replace(R.id.fragment_container, new OverviewFragment())
                         .commit();
                 break;
-            case R.id.nav_nastavitve:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new SettingsFragment())
-                        .commit();
-                break;
-            case R.id.nav_racun:
-                Toast.makeText(this, "Logging in...", Toast.LENGTH_LONG).show();
-                Login(this);
-                break;
             // za testeranje openCV, odstrani na koncu
             case R.id.nav_OpenCV_test:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OpenCVtestFragment()).commit();
-                break;
-            case R.id.nav_Color_test:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ColorTestFragment()).commit();
                 break;
         }
 

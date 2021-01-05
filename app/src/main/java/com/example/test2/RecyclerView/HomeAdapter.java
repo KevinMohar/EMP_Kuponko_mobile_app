@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 
@@ -77,6 +78,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         this.racuni = racuni;
     }
 
+    public void setViewModel(KuponkoViewModel model){this.viewModel = model;}
+
     @NonNull
     @Override
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -89,9 +92,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         Racun r = racuni.get(position);
+        Trgovina t = viewModel.getTrgovinaById(r.getIdTrgovine());
 
         holder.znesekRacuna.setText(String.format("%.2f", r.getZnesek()) +"€");
-        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ r.getTrgovina().getIme());
+        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ t.getIme());
         // TODO: formatiraj datum v lepso obliko
         holder.datumRacuna.setText(r.getDatum().toString());
     }

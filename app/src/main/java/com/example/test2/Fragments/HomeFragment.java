@@ -188,6 +188,7 @@ public class HomeFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
         adapter = new HomeAdapter();
         adapter.setRacuni(currentMonth.getRacuni());
+        adapter.setViewModel(viewModel);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -231,6 +232,10 @@ public class HomeFragment extends Fragment {
         cal.set(Calendar.MILLISECOND, 0);
         Date datum = cal.getTime();
         cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
+        cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
         Date to = cal.getTime();
         currentMonth = viewModel.getMonthByDate(datum);
         if(currentMonth == null){
@@ -238,9 +243,10 @@ public class HomeFragment extends Fragment {
             currentMonth.setRacuni(new ArrayList<Racun>());
             viewModel.insertMesec(currentMonth);
         }else {
+            //viewModel.deleteAllRacuns();
+            //viewModel.deleteAllMesec();
             currentMonth.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(datum,to));
         }
-
     }
 
     private void setTitleText(){
@@ -292,7 +298,6 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.alert_dialog_new_racun_naprej).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: preveri ce so vsi inputi povni --> posli podatke v pregled racuna
 
                 EditText trgovina = view.findViewById(R.id.alert_dialog_new_racun_trgovina);
                 EditText naslov = view.findViewById(R.id.alert_dialog_new_racun_naslov);

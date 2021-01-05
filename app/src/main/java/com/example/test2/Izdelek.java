@@ -16,6 +16,6 @@ public class Izdelek {
 
     @Override
     public String toString() {
-        return ime+","+kolicina+","+cena;
+        return (ime+","+kolicina+","+cena);
     }
 }
