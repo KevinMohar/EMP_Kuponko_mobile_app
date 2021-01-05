@@ -65,4 +65,12 @@ public class Racun {
     public int getIdTrgovine() {
         return idTrgovine;
     }
+
+    public void addIzdelek(Izdelek izde){ this.izdelki.add(izde);}
+
+    public void setZnesek(float newZnesek){ this.znesek = newZnesek;}
+
+    public void removeIzdelekAt(int position){ this.izdelki.remove(position);}
+
+    public void replaceIzdelekAt(int position, Izdelek izdelek){this.izdelki.set(position, izdelek);}
 }

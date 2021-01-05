@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/alert_dialog_new_racun"
+    android:id="@+id/alert_dialog_new_izdelek"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="25dp"
@@ -40,17 +40,18 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
-            android:text="Trgovina"
+            android:text="Naziv izdelka"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/alert_dialog_new_racun_title" />
 
         <EditText
-            android:id="@+id/alert_dialog_new_racun_trgovina"
+            android:id="@+id/alert_dialog_izdelek_naziv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="14dp"
+            android:hint="Solata Ledenka 0,5kg"
             android:inputType="textPersonName"
             android:paddingTop="5dp"
             app:layout_constraintEnd_toEndOf="@+id/textView9"
@@ -62,34 +63,67 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Naslov trgovine"
-            app:layout_constraintEnd_toEndOf="@+id/alert_dialog_new_racun_trgovina"
-            app:layout_constraintStart_toStartOf="@+id/alert_dialog_new_racun_trgovina"
-            app:layout_constraintTop_toBottomOf="@+id/alert_dialog_new_racun_trgovina" />
+            android:text="Količina"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="@+id/alert_dialog_izdelek_naziv"
+            app:layout_constraintTop_toBottomOf="@+id/alert_dialog_izdelek_naziv" />
 
         <EditText
-            android:id="@+id/alert_dialog_new_racun_naslov"
+            android:id="@+id/alert_dialog_izdelek_kolicna"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
             android:layout_marginBottom="16dp"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:paddingTop="5dp"
             android:text=""
             android:textSize="14dp"
+            android:hint="1"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView11"
+            app:layout_constraintEnd_toStartOf="@+id/alert_dialog_izdelek_cena"
             app:layout_constraintStart_toStartOf="@+id/textView11"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="Cena/kos(€)"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView11"
+            app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+        <EditText
+            android:id="@+id/alert_dialog_izdelek_cena"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:paddingTop="5dp"
+            android:text=""
+            android:hint="1,41"
+            android:textAlignment="center"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/alert_dialog_izdelek_kolicna"
+            app:layout_constraintEnd_toEndOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:gravity="center_horizontal" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/alert_dialog_new_racun_naprej"
+        android:id="@+id/alert_dialog_izdelek_dodaj"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@drawable/alert_title_default_btn_background"
-        android:text="NAPREJ"
+        android:text="POTRDI"
         android:textColor="@android:color/white"
         android:textSize="16dp"
         android:textStyle="bold"

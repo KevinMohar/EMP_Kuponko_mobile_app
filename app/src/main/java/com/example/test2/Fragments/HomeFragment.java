@@ -281,7 +281,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void VstaviRacunRocno(){
-        // TODO: odpres obrazec za rocno vstavljanje
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
         final View view = LayoutInflater.from(RootView.getContext())
                 .inflate(R.layout.alert_dialog_new_racun, (ConstraintLayout) getActivity()

@@ -1,13 +1,19 @@
 package com.example.test2.Fragments;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,6 +72,43 @@ public class RacunOverviewFragment extends Fragment {
 
     private void AddItem() {
         // TODO: odpre alert dialog za dodajanje izdelka --> doda izdelke v seznam izdelkov racuna --> updejta racun v bazi
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        final View view = LayoutInflater.from(RootView.getContext())
+                .inflate(R.layout.alert_dialog_izdelek, (ConstraintLayout) getActivity()
+                        .findViewById(R.id.alert_dialog_new_izdelek));
+        builder.setView(view);
+
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.alert_dialog_izdelek_dodaj).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText naziv = view.findViewById(R.id.alert_dialog_izdelek_naziv);
+                EditText kolicina = view.findViewById(R.id.alert_dialog_izdelek_kolicna);
+                EditText znesek = view.findViewById(R.id.alert_dialog_izdelek_cena);
+
+                if(naziv.getText().toString().trim().length() != 0 && kolicina.getText().toString().trim().length() != 0 && znesek.getText().toString().trim().length() != 0){
+                    int kol = Integer.parseInt(kolicina.getText().toString().trim());
+                    float znes = Float.parseFloat(znesek.getText().toString().trim());
+                    Izdelek i = new Izdelek(naziv.getText().toString().trim(), kol, znes);
+                    racun.addIzdelek(i);
+                    adapter.setIzdelki((ArrayList<Izdelek>) racun.getIzdelki());
+                    adapter.notifyItemInserted(racun.getIzdelki().size()-1);
+                    racun.setZnesek(racun.getZnesek()+(i.kolicina*i.cena));
+                    viewModel.updateRacun(racun);
+                    SetRacunInfo();
+                    alertDialog.dismiss();
+                }else {
+                    Toast.makeText(getContext(), "Vpišite vsa polja", Toast.LENGTH_LONG);
+                }
+            }
+        });
+
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
     }
 
     private void buildRecyclerView(final View view) {
@@ -81,27 +124,71 @@ public class RacunOverviewFragment extends Fragment {
         adapter.setOnItemClickListener(new RacunOverviewAdapter.OnItemClickListener() {
             @Override
             public void onCardClick(int position) {
-                EditItem();
+                EditItem(position);
             }
 
             @Override
             public void onDeleteClick(int position) {
-                DeleteItem();
+                DeleteItem(position);
             }
         });
 
     }
 
-    private void DeleteItem() {
-        // TODO: odpre alert dialog --> ce da --> izbrise izdelek iz seznama izdelkov racuna --> updejta racun v bazi
+    private void DeleteItem(int position) {
+        racun.removeIzdelekAt(position);
+        adapter.notifyItemRemoved(position);
     }
 
-    private void EditItem() {
+    private void EditItem(final int position) {
         // TODO: odpre alert dialog kjer loh spreminjas podatke izdelka --> skupna cena se izracuna naknadno
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        final View view = LayoutInflater.from(RootView.getContext())
+                .inflate(R.layout.alert_dialog_izdelek, (ConstraintLayout) getActivity()
+                        .findViewById(R.id.alert_dialog_new_izdelek));
+        builder.setView(view);
+
+        Izdelek izd = racun.getIzdelki().get(position);
+
+        ((EditText)view.findViewById(R.id.alert_dialog_izdelek_naziv)).setText(izd.ime);
+        ((EditText)view.findViewById(R.id.alert_dialog_izdelek_kolicna)).setText(izd.kolicina+"");
+        ((EditText)view.findViewById(R.id.alert_dialog_izdelek_cena)).setText(izd.cena+"");
+
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.alert_dialog_izdelek_dodaj).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText naziv = view.findViewById(R.id.alert_dialog_izdelek_naziv);
+                EditText kolicina = view.findViewById(R.id.alert_dialog_izdelek_kolicna);
+                EditText znesek = view.findViewById(R.id.alert_dialog_izdelek_cena);
+
+                if(naziv.getText().toString().trim().length() != 0 && kolicina.getText().toString().trim().length() != 0 && znesek.getText().toString().trim().length() != 0){
+                    int kol = Integer.parseInt(kolicina.getText().toString().trim());
+                    float znes = Float.parseFloat(znesek.getText().toString().trim());
+                    Izdelek i = new Izdelek(naziv.getText().toString().trim(), kol, znes);
+                    float cena = racun.getIzdelki().get(position).cena;
+                    racun.replaceIzdelekAt(position, i);
+                    adapter.setIzdelki((ArrayList<Izdelek>) racun.getIzdelki());
+                    adapter.notifyItemChanged(position);
+                    racun.setZnesek(racun.getZnesek()+(i.kolicina*i.cena)-cena);
+                    viewModel.updateRacun(racun);
+                    SetRacunInfo();
+                    alertDialog.dismiss();
+                }else {
+                    Toast.makeText(getContext(), "Vpišite vsa polja", Toast.LENGTH_LONG);
+                }
+            }
+        });
+
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
     }
 
     private void SetRacunInfo(){
-        // TODO: nastavi podatke v headerju (racun, datum, naslov, ...)
         TextView naziv = RootView.findViewById(R.id.racun_overview_title);
         TextView naslov = RootView.findViewById(R.id.racun_overview_naslov);
         TextView datum = RootView.findViewById(R.id.racun_overview_datum);
@@ -110,6 +197,7 @@ public class RacunOverviewFragment extends Fragment {
 
         naziv.setText("RAČUN "+racun.getId()+": "+racun.getTrgovina().getIme());
         naslov.setText(racun.getTrgovina().getNaslov());
+        // TODO: formateraj datum da bo mal lepis izpis (dd.mm.yyyy  hh:mm:ss)
         datum.setText(racun.getDatum()+"");
         znesek.setText(racun.getZnesek()+"€");
         kolicina.setText("Št izdelkov: "+racun.getIzdelki().size());
