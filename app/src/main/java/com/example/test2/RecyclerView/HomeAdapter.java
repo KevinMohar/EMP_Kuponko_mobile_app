@@ -15,6 +15,7 @@ import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         holder.znesekRacuna.setText(String.format("%.2f", r.getZnesek()) +"€");
         holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ t.getIme());
         // TODO: formatiraj datum v lepso obliko
-        holder.datumRacuna.setText(r.getDatum().toString());
+        holder.datumRacuna.setText(new SimpleDateFormat("dd.mm.yyyy hh:mm:ss").format(r.getDatum()));
     }
 
     @Override

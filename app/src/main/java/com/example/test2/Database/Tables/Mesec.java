@@ -44,6 +44,8 @@ public class Mesec {
     }
 
     public float getStroski() {
+        for (Racun r : racuni)
+            stroski+=r.getZnesek();
         return stroski;
     }
 

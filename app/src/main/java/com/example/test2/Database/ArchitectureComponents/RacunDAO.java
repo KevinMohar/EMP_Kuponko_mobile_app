@@ -26,13 +26,13 @@ public interface RacunDAO {
     //##############################################################################################
 
     //#####################################  UPDATE TASKS  #########################################
-    @Update
-    void Update(Racun racun);
+    @Query("UPDATE racuni SET znesek = :znesek WHERE id = :id")
+    void Update(float znesek, int id);
     //##############################################################################################
 
     //#####################################  DELETE TASKS  #########################################
-    @Delete
-    void Delete(Racun racun);
+    @Query("DELETE FROM racuni WHERE id = :id")
+    void Delete(int id);
 
     @Query("DELETE FROM racuni")
     void DeleteAllRacuns();
@@ -47,6 +47,9 @@ public interface RacunDAO {
 
     @Query("SELECT * FROM racuni WHERE id = :id")
     Racun GetRacunById(int id);
+
+    @Query("SELECT * FROM racuni WHERE datum = :date")
+    Racun GetRacunByDate(Date date);
 
     @Query("SELECT * FROM racuni WHERE datum BETWEEN :from AND :to")
     List<Racun> GetRacuniByMonth(Date from, Date to);

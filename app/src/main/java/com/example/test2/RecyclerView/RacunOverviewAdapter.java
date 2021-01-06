@@ -85,8 +85,8 @@ public class RacunOverviewAdapter extends RecyclerView.Adapter<RacunOverviewAdap
     public void onBindViewHolder(@NonNull OverviewRacunViewHolder holder, int position) {
         Izdelek i = izdelki.get(position);
         holder.izdelek.setText(i.ime);
-        holder.znesekKos.setText(i.cena+"€");
-        holder.znesekSkupaj.setText((i.cena*i.kolicina)+"€");
+        holder.znesekKos.setText(String.format("%.2f", i.cena) +"€");
+        holder.znesekSkupaj.setText(String.format("%.2f", (i.cena*i.kolicina))+"€");
         holder.kolicina.setText("x"+i.kolicina);
     }
 

@@ -20,12 +20,12 @@ public class Racun {
 
     private int idTrgovine;
 
-    @Ignore
-    private Trgovina trgovina;
-
     private float znesek;
 
     private List<Izdelek> izdelki;
+
+    @Ignore
+    private Trgovina trgovina;
 
     public Racun(Date datum, int idTrgovine, float znesek, List<Izdelek> izdelki) {
         this.datum = datum;
@@ -68,7 +68,7 @@ public class Racun {
 
     public void addIzdelek(Izdelek izde){ this.izdelki.add(izde);}
 
-    public void setZnesek(float newZnesek){ this.znesek = newZnesek;}
+    public void nastaviZnesek(float newZnesek){ this.znesek = newZnesek;}
 
     public void removeIzdelekAt(int position){ this.izdelki.remove(position);}
 

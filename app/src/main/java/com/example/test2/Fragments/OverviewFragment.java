@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Racun;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.OverviewAdapter;
@@ -57,6 +58,22 @@ public class OverviewFragment extends Fragment {
         meseci = (ArrayList<Mesec>) viewModel.getAllMesec();
         if(meseci == null)
             meseci = new ArrayList<>();
+        else{
+            for(Mesec m : meseci){
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(m.getDatum());
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date from = cal.getTime();
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date to = cal.getTime();
+
+                m.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(from, to));
+            }
+        }
     }
 
     private void buildRecyclerView(final View view) {

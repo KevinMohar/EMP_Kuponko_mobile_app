@@ -14,4 +14,12 @@
             android:icon="@drawable/ic_baseline_adb_24"
             android:title="OpenCV_test" />
     </group>
+
+    <item android:title="Ostalo">
+        <menu>
+            <item android:id="@+id/nav_izbrisi_db"
+                android:icon="@drawable/ic_baseline_remove_24"
+                android:title="Izbriši vse podatke" />
+        </menu>
+    </item>
 </menu>

@@ -1,7 +1,6 @@
 package com.example.test2.Fragments;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,10 +23,10 @@ import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.Izdelek;
 import com.example.test2.R;
-import com.example.test2.RecyclerView.HomeAdapter;
 import com.example.test2.RecyclerView.RacunOverviewAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -71,7 +70,6 @@ public class RacunOverviewFragment extends Fragment {
     }
 
     private void AddItem() {
-        // TODO: odpre alert dialog za dodajanje izdelka --> doda izdelke v seznam izdelkov racuna --> updejta racun v bazi
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
         final View view = LayoutInflater.from(RootView.getContext())
                 .inflate(R.layout.alert_dialog_izdelek, (ConstraintLayout) getActivity()
@@ -94,8 +92,9 @@ public class RacunOverviewFragment extends Fragment {
                     racun.addIzdelek(i);
                     adapter.setIzdelki((ArrayList<Izdelek>) racun.getIzdelki());
                     adapter.notifyItemInserted(racun.getIzdelki().size()-1);
-                    racun.setZnesek(racun.getZnesek()+(i.kolicina*i.cena));
-                    viewModel.updateRacun(racun);
+                    racun.nastaviZnesek(racun.getZnesek()+(i.kolicina*i.cena));
+                    viewModel.deleteRacun(racun);
+                    viewModel.insertRacun(racun);
                     SetRacunInfo();
                     alertDialog.dismiss();
                 }else {
@@ -171,7 +170,7 @@ public class RacunOverviewFragment extends Fragment {
                     racun.replaceIzdelekAt(position, i);
                     adapter.setIzdelki((ArrayList<Izdelek>) racun.getIzdelki());
                     adapter.notifyItemChanged(position);
-                    racun.setZnesek(racun.getZnesek()+(i.kolicina*i.cena)-cena);
+                    racun.nastaviZnesek(racun.getZnesek()+(i.kolicina*i.cena)-cena);
                     viewModel.updateRacun(racun);
                     SetRacunInfo();
                     alertDialog.dismiss();
@@ -197,14 +196,12 @@ public class RacunOverviewFragment extends Fragment {
 
         naziv.setText("RAČUN "+racun.getId()+": "+racun.getTrgovina().getIme());
         naslov.setText(racun.getTrgovina().getNaslov());
-        // TODO: formateraj datum da bo mal lepis izpis (dd.mm.yyyy  hh:mm:ss)
-        datum.setText(racun.getDatum()+"");
-        znesek.setText(racun.getZnesek()+"€");
+        datum.setText(new SimpleDateFormat("dd.mm.yyyy hh:mm:ss").format(racun.getDatum()));
+        znesek.setText(String.format("%.2f", racun.getZnesek()) +"€");
         kolicina.setText("Št izdelkov: "+racun.getIzdelki().size());
     }
 
     private void GetData(){
-        // TODO: pridobi id racuna iz bundla in ga prebere iz baze
         if(getArguments() != null) {
             if(getArguments().containsKey("idRacuna")){
                 int id = getArguments().getInt("idRacuna");
@@ -221,8 +218,9 @@ public class RacunOverviewFragment extends Fragment {
             t = viewModel.getTrgovinaByNameAndAddress(trgovina, naslov);
 
             racun = new Racun(Calendar.getInstance().getTime(), t.getId(), 0, new ArrayList<Izdelek>());
-            racun.setTrgovina(t);
             viewModel.insertRacun(racun);
+            racun = viewModel.getRacunByDate(racun.getDatum());
+            racun.setTrgovina(t);
         }
     }
 }

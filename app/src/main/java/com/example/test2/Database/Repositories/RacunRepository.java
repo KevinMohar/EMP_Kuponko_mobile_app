@@ -27,17 +27,17 @@ public class RacunRepository {
 
     //------------------------------------------INSERTS---------------------------------------------
     public void Insert(Racun racun){
-        new InsertRacunAsyncTask(racunDAO).execute(racun);
+        racunDAO.Insert(racun);
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------UPDATES---------------------------------------------
     public void Update(Racun racun){
-        new UpdateRacunAsyncTask(racunDAO).execute(racun);
+        racunDAO.Update(racun.getZnesek(), racun.getId());
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------------------DELETES---------------------------------------------
     public void Delete(Racun racun){
-        new DeleteRacunAsyncTask(racunDAO).execute(racun);
+        racunDAO.Delete(racun.getId());
     }
     public void DeleteAllRacuns(){
         new DeleteAllRacunsAsyncTask(racunDAO).execute();
@@ -56,6 +56,7 @@ public class RacunRepository {
     public Racun GetRacunById(int id){
         return racunDAO.GetRacunById(id);
     }
+    public Racun GetRacunBySingleDate(Date date) {return  racunDAO.GetRacunByDate(date);}
     //----------------------------------------------------------------------------------------------
 
 
@@ -77,19 +78,7 @@ public class RacunRepository {
     //##############################################################################################
 
     //#####################################  UPDATE TASKS  #########################################
-    private static class UpdateRacunAsyncTask extends AsyncTask<Racun, Void, Void>{
-        private RacunDAO racunDAO;
 
-        private UpdateRacunAsyncTask(RacunDAO racunDAO){
-            this.racunDAO = racunDAO;
-        }
-
-        @Override
-        protected Void doInBackground(Racun... racuns) {
-            racunDAO.Update(racuns[0]);
-            return null;
-        }
-    }
     //##############################################################################################
 
     //#####################################  DELETE TASKS  #########################################
@@ -102,7 +91,7 @@ public class RacunRepository {
 
         @Override
         protected Void doInBackground(Racun... racuns) {
-            racunDAO.Delete(racuns[0]);
+            racunDAO.Delete(racuns[0].getId());
             return null;
         }
     }

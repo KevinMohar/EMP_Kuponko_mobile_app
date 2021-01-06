@@ -51,6 +51,7 @@ public class KuponkoViewModel extends AndroidViewModel {
     public void deleteMesec(Mesec mesec){mesecRepository.Delete(mesec);}
     public void deleteAllMesec(){mesecRepository.DeleteAll();}
     public void deleteTrgovina(Trgovina trgovina){trgovinaRepository.Delete(trgovina);}
+    public void deleteAllTrgovina(){trgovinaRepository.DeleteAllTrgovina();}
     //##############################################################################################
 
     //#####################################  QUERY TASKS  ##########################################
@@ -65,5 +66,6 @@ public class KuponkoViewModel extends AndroidViewModel {
     public Trgovina getTrgovinaByNameAndAddress(String name, String address){
         return trgovinaRepository.GetStoreByNameAndAddress(name, address);
     }
+    public Racun getRacunByDate(Date date){ return racunRepository.GetRacunBySingleDate(date);}
     //##############################################################################################
 }

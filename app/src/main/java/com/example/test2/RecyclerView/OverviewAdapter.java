@@ -84,7 +84,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Overvi
         Mesec m = meseci.get(position);
 
         holder.mesec.setText(m.getDisplayDate());
-        holder.stroski.setText(m.getStroski()+"€");
+        holder.stroski.setText(String.format("%.2f", m.getStroski()) +"€");
     }
 
     @Override

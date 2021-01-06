@@ -7,12 +7,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.test2.Database.Tables.Mesec;
+import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.Fragments.ColorTestFragment;
 import com.example.test2.Fragments.HomeFragment;
 import com.example.test2.Fragments.OpenCVtestFragment;
@@ -20,16 +26,30 @@ import com.example.test2.Fragments.OverviewFragment;
 import com.example.test2.Fragments.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+
+    KuponkoViewModel viewModel;
+
+    Mesec currentMonth;
+
+    TextView navUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
+                .getInstance(this.getApplication())).get(KuponkoViewModel.class);
+        getCurrentMonth();
         //-------------------------------- nastavitev side menuja-----------------------------------
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -37,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        navUsername = (TextView) headerView.findViewById(R.id.nav_header_stroski);
+        navUsername.setText("STROŠKI TEKOČEGA MESECA: "+ String.format("%.2f", currentMonth.getStroski()) +"€");
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -50,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         //------------------------------------------------------------------------------------------
 
-        // TODO: your code here
+
     }
 
     @Override
@@ -70,6 +93,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_OpenCV_test:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OpenCVtestFragment()).commit();
                 break;
+            case R.id.nav_izbrisi_db:
+                viewModel.deleteAllMesec();
+                viewModel.deleteAllRacuns();
+                viewModel.deleteAllTrgovina();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment())
+                        .commit();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -86,7 +117,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
     }
 
-    private void Login(Context c){
-        // login v user acc
+
+    private void getCurrentMonth(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date datum = cal.getTime();
+        cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
+        cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
+        Date to = cal.getTime();
+        currentMonth = viewModel.getMonthByDate(datum);
+        if(currentMonth == null){
+            currentMonth = new Mesec(datum, 0);
+            currentMonth.setRacuni(new ArrayList<Racun>());
+            viewModel.insertMesec(currentMonth);
+        }else {
+            //viewModel.deleteAllRacuns();
+            //viewModel.deleteAllMesec();
+            currentMonth.setRacuni((ArrayList<Racun>) viewModel.getAllRacunsByMonth(datum,to));
+        }
     }
 }

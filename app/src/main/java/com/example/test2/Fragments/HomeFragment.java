@@ -141,7 +141,7 @@ public class HomeFragment extends Fragment {
 
     public void RemoveRecipt(final int pos){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
-        View view = LayoutInflater.from(RootView.getContext())
+        final View view = LayoutInflater.from(RootView.getContext())
                 .inflate(R.layout.alert_dialog_warning, (ConstraintLayout) getActivity()
                         .findViewById(R.id.alert_dialog_warning));
         builder.setView(view);
@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
                 currentMonth.getRacuni().remove(pos);
                 // da updejtas recycler view
                 adapter.notifyItemRemoved(pos);
-                Toast.makeText(getContext(), "Podatki izbrisani", Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "Račun izbrisan", Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
         });
@@ -197,19 +197,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 OpenRecipt(position);
-
-                // FIXME:-------------------------samo za testeranje----------------------------------------
-                Toast.makeText(view.getContext(), "Izbran račun "+(position+1), Toast.LENGTH_LONG).show();
-                // -----------------------------------------------------------------------------------------
             }
 
             @Override
             public void onDeleteClick(int position) {
                 RemoveRecipt(position);
-
-                // FIXME:-------------------------samo za testeranje----------------------------------------
-                Toast.makeText(view.getContext(), "Račun izbrisan", Toast.LENGTH_LONG).show();
-                // -----------------------------------------------------------------------------------------
             }
         });
     }
@@ -254,7 +246,7 @@ public class HomeFragment extends Fragment {
         homeMesec.setText(currentMonth.getDisplayDate());
 
         TextView stroski = RootView.findViewById(R.id.home_stroski);
-        stroski.setText("STROŠKI: " + currentMonth.getStroski()+"€");
+        stroski.setText("STROŠKI: " + String.format("%.2f", currentMonth.getStroski()) +"€");
     }
 
     private void GraphData(){

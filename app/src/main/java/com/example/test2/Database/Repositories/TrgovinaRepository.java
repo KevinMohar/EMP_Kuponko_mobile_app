@@ -36,6 +36,7 @@ public class TrgovinaRepository {
     public void Delete(Trgovina trgovina){
         new DeleteStoreAsyncTask(trgovinaDAO).execute(trgovina);
     }
+    public void DeleteAllTrgovina(){ new DeleteAllStoreAsyncTask(trgovinaDAO).execute();}
     //----------------------------------------------------------------------------------------------
     //------------------------------------------QUERIES---------------------------------------------
     public List<Trgovina> GetAllStores(){
@@ -71,6 +72,20 @@ public class TrgovinaRepository {
         @Override
         protected Void doInBackground(Trgovina... trgovinas) {
             trgovinaDAO.Delete(trgovinas[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAllStoreAsyncTask extends AsyncTask<Void, Void, Void>{
+        private TrgovinaDAO trgovinaDAO;
+
+        private DeleteAllStoreAsyncTask(TrgovinaDAO trgovinaDAO){
+            this.trgovinaDAO = trgovinaDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            trgovinaDAO.DeleteAllStores();
             return null;
         }
     }
