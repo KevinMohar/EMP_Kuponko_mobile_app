@@ -206,6 +206,8 @@ public class RacunOverviewFragment extends Fragment {
             if(getArguments().containsKey("idRacuna")){
                 int id = getArguments().getInt("idRacuna");
                 racun = viewModel.getRacunById(id);
+                Trgovina t = viewModel.getTrgovinaById(racun.getIdTrgovine());
+                racun.setTrgovina(t);
                 return;
             }
             String trgovina = getArguments().getString("racun_trgovina");
