@@ -42,16 +42,16 @@ public interface RacunDAO {
     //##############################################################################################
 
     //#####################################  QUERY TASKS  ##########################################
-    @Query("SELECT * FROM racuni")
+    @Query("SELECT * FROM racuni ORDER BY datum DESC")
     List<Racun> GetAllRacuns();
 
     @Query("SELECT * FROM racuni WHERE id = :id")
     Racun GetRacunById(int id);
 
-    @Query("SELECT * FROM racuni WHERE datum = :date")
+    @Query("SELECT * FROM racuni WHERE datum = :date ORDER BY datum DESC")
     Racun GetRacunByDate(Date date);
 
-    @Query("SELECT * FROM racuni WHERE datum BETWEEN :from AND :to")
+    @Query("SELECT * FROM racuni WHERE datum BETWEEN :from AND :to ORDER BY datum DESC")
     List<Racun> GetRacuniByMonth(Date from, Date to);
     //##############################################################################################
 }
