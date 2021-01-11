@@ -141,8 +141,11 @@ public class RacunOverviewFragment extends Fragment {
     }
 
     private void DeleteItem(int position) {
+        Izdelek i = racun.getIzdelki().get(position);
+        racun.nastaviZnesek(racun.getZnesek()-(i.kolicina*i.cena));
         racun.removeIzdelekAt(position);
         adapter.notifyItemRemoved(position);
+        SetRacunInfo();
     }
 
     private void EditItem(final int position) {
