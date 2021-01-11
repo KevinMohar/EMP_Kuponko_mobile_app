@@ -24,6 +24,7 @@ import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.Database.Tables.Racun;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.Fragments.HomeFragment;
+import com.example.test2.Fragments.NotifyFragment;
 import com.example.test2.Fragments.OverviewFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -87,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_pregled:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new OverviewFragment())
+                        .commit();
+                break;
+            case R.id.nav_notify:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new NotifyFragment())
                         .commit();
                 break;
             case R.id.nav_izbrisi_db:

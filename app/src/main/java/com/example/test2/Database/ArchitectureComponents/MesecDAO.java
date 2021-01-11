@@ -40,7 +40,7 @@ public interface MesecDAO {
     //##############################################################################################
 
     //#####################################  QUERY TASKS  ##########################################
-    @Query("SELECT * FROM meseci")
+    @Query("SELECT * FROM meseci ORDER BY datum DESC")
     List<Mesec> GetAllMonths();
 
     @Query("SELECT * FROM meseci WHERE id = :id")
