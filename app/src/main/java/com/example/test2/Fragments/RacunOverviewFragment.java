@@ -207,7 +207,7 @@ public class RacunOverviewFragment extends Fragment {
         naziv.setText("RAČUN "+racun.getId()+":");
         naziv_ime.setText(racun.getTrgovina().getIme());
         naslov.setText(racun.getTrgovina().getNaslov());
-        datum.setText(new SimpleDateFormat("dd.MM.yyyy hh:mm:ss").format(racun.getDatum()));
+        datum.setText(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(racun.getDatum()));
         znesek.setText(String.format("%.2f", racun.getZnesek()) +"€");
         kolicina.setText("Št izdelkov: "+racun.getIzdelki().size());
 
