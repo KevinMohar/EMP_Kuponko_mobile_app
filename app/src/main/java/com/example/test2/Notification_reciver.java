@@ -37,7 +37,7 @@ public class Notification_reciver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Notification_start.CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_racunkologo)
-                .setContentTitle("Mesecna poraba - " + mesec.getDisplayDate())
+                .setContentTitle("Mesečna poraba - " + mesec.getDisplayDate())
                 .setContentText("Porabili ste - " + String.format("%.2f", mesec.getStroski()) + "€")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE);

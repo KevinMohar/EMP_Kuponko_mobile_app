@@ -43,21 +43,21 @@ public class NotifyFragment extends Fragment {
         switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isSwitched = switcher.isChecked();
+                saveData();
+
                 Intent intent = new Intent(NotifyFragment.this.getContext(), Notification_reciver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(NotifyFragment.this.getContext(),0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-                if (isChecked) {
+                if (switcher.isChecked()) {
                     long startTime = (30 - Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) * 24 * 60 * 60 * 1000;
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, AlarmManager.INTERVAL_DAY * 30, pendingIntent);
                 }
                 else {
                     alarmManager.cancel(pendingIntent);
                 }
-
-                isSwitched = isChecked;
-                saveData();
             }
         });
 
