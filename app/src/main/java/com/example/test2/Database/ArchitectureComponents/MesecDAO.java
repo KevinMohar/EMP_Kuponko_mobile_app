@@ -46,7 +46,7 @@ public interface MesecDAO {
     @Query("SELECT * FROM meseci WHERE id = :id")
     Mesec GetMonthById(int id);
 
-    @Query("SELECT * FROM meseci WHERE datum = :date")
+    @Query("SELECT * FROM meseci WHERE datum = :date ORDER BY datum DESC")
     Mesec GetMonthByDate(Date date);
     //##############################################################################################
 }
