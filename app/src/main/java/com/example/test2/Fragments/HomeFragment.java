@@ -217,7 +217,7 @@ public class HomeFragment extends Fragment {
         adapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                OpenRecipt(position);
             }
 
             @Override
