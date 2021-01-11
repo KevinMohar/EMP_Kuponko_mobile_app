@@ -73,4 +73,6 @@ public class Racun {
     public void removeIzdelekAt(int position){ this.izdelki.remove(position);}
 
     public void replaceIzdelekAt(int position, Izdelek izdelek){this.izdelki.set(position, izdelek);}
+
+    public void setIdTrgovine(int idTrgovine) {this.idTrgovine = idTrgovine;}
 }

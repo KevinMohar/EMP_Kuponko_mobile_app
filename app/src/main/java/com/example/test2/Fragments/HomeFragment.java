@@ -1,9 +1,15 @@
 package com.example.test2.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +34,26 @@ import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.Izdelek;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
+import com.example.test2.TrgovinaProcess;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
 
@@ -53,6 +70,10 @@ public class HomeFragment extends Fragment {
     private Mesec currentMonth;
 
     private GraphView graphView;
+
+    private Uri uri;
+    private Bitmap bitmap;
+    private TrgovinaProcess myShops;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
@@ -212,7 +233,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void OpenRecipt(int pos){
-        // TODO: odpri pregled racuna
+        Racun racun = currentMonth.getRacuni().get(pos);
+        RacunOverviewFragment rof = new RacunOverviewFragment();
+        Bundle args = new Bundle();
+        args.putInt("idRacuna", racun.getId());
+        rof.setArguments(args);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, rof).commit();
     }
 
     private void getCurrentMonth(){
@@ -274,8 +300,93 @@ public class HomeFragment extends Fragment {
     }
 
     private void VstaviRacunKotSliko(){
-        // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
-        // TODO: ali odpres galerijo --> izberes fotko --> croppas --> dodas racun v bazo --> dodas racun v array
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(getContext(), this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                uri = result.getUri();
+
+                try {
+                    bitmap = getThumbnail(uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();
+
+                if (!textRecognizer.isOperational()) {
+                    Log.w("HomeFragment", "Detector dependencies are not yet available");
+                } else {
+                    Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                    SparseArray<TextBlock> items = textRecognizer.detect(frame);
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for (int i=0; i<items.size();++i) {
+                        TextBlock item = items.valueAt(i);
+                        stringBuilder.append(item.getValue());
+                        stringBuilder.append("\n");
+                    }
+
+                    Log.w("izpis",stringBuilder.toString());
+                    myShops = new TrgovinaProcess();
+
+                    if (myShops.isSet(stringBuilder) && !myShops.error) {
+                        Trgovina trgovina = new Trgovina(myShops.ime, myShops.naslov);
+                        myShops.processIzdelki(stringBuilder);
+                        viewModel.insertTrgovina(trgovina);
+                        Trgovina trgovinaNew = viewModel.getTrgovinaByNameAndAddress(myShops.ime, myShops.naslov);
+                        if (trgovinaNew == null)
+                            trgovinaNew = trgovina;
+
+                        Date cal = Calendar.getInstance().getTime();
+                        Racun racun = new Racun(cal, trgovinaNew.getId(), myShops.znesek, myShops.izdelki);
+                        viewModel.insertRacun(racun);
+                        Racun racunNew = viewModel.getRacunByDate(cal);
+
+                        RacunOverviewFragment rof = new RacunOverviewFragment();
+                        Bundle args = new Bundle();
+                        args.putInt("idRacuna", racunNew.getId());
+                        rof.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, rof).commit();
+                    } else {
+                        Toast.makeText(getContext(), "Trgovina ni podprta!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    public Bitmap getThumbnail(Uri uri) throws FileNotFoundException, IOException{
+        InputStream input = getActivity().getContentResolver().openInputStream(uri);
+
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        onlyBoundsOptions.inDither=true;//optional
+        onlyBoundsOptions.inPreferredConfig=Bitmap.Config.ARGB_8888;//optional
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
+            return null;
+        }
+
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inDither = true;
+        bitmapOptions.inPreferredConfig=Bitmap.Config.ARGB_8888;
+        input = getActivity().getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+        return bitmap;
     }
 
     private void VstaviRacunRocno(){

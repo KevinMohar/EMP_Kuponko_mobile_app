@@ -23,20 +23,47 @@
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
-            android:text="RAČUN ###: Trgovina"
+            android:text="RAČUN ###:"
             android:textColor="@android:color/white"
             android:textSize="16dp"
             android:textStyle="bold"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/racun_overview_naslov"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/racun_edit_title"
+            android:inputType="textPersonName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Trgovina"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:lines="1"
+            android:ellipsize="end"
+            android:background="@drawable/ic_line"
+            android:imeOptions="actionDone"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/racun_overview_title"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/racun_overview_naslov"
+            android:inputType="textPersonName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/ic_line"
+            android:ellipsize="end"
+            android:lines="1"
             android:text="Naslov trgovine, #### Ljubljana"
             android:textColor="@android:color/white"
+            android:imeOptions="actionDone"
+            app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintStart_toStartOf="@+id/racun_overview_title"
             app:layout_constraintTop_toBottomOf="@+id/racun_overview_title" />
 
@@ -44,7 +71,7 @@
             android:id="@+id/racun_overview_datum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="dd/mm/yyyy hh:mm:ss"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="@+id/racun_overview_naslov"
@@ -91,6 +118,34 @@
             app:layout_constraintBottom_toBottomOf="@+id/racun_overview_datum"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/racun_overview_datum" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/racun_edit_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/racun_edit_title"
+            app:layout_constraintTop_toTopOf="@+id/racun_edit_title"
+            app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/racun_overview_naslov"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/racun_overview_naslov"
+            app:layout_constraintTop_toTopOf="@+id/racun_overview_naslov"
+            app:srcCompat="@drawable/ic_baseline_edit_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

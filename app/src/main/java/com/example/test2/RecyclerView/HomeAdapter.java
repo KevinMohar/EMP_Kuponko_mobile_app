@@ -96,7 +96,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         Trgovina t = viewModel.getTrgovinaById(r.getIdTrgovine());
 
         holder.znesekRacuna.setText(String.format("%.2f", r.getZnesek()) +"€");
-        holder.imeRacuna.setText("RAČUN "+ (position+1) +": "+ t.getIme());
+        holder.imeRacuna.setText("RAČUN "+ r.getId() +": "+ t.getIme());
         // TODO: formatiraj datum v lepso obliko
         holder.datumRacuna.setText(new SimpleDateFormat("dd.mm.yyyy hh:mm:ss").format(r.getDatum()));
     }

@@ -3,6 +3,10 @@ package com.example.test2.Fragments;
 import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -189,16 +195,56 @@ public class RacunOverviewFragment extends Fragment {
 
     private void SetRacunInfo(){
         TextView naziv = RootView.findViewById(R.id.racun_overview_title);
-        TextView naslov = RootView.findViewById(R.id.racun_overview_naslov);
+        EditText naziv_ime = RootView.findViewById(R.id.racun_edit_title);
+        EditText naslov = RootView.findViewById(R.id.racun_overview_naslov);
         TextView datum = RootView.findViewById(R.id.racun_overview_datum);
         TextView znesek = RootView.findViewById(R.id.racun_overview_znesek);
         TextView kolicina = RootView.findViewById(R.id.racun_overview_izdelki);
 
-        naziv.setText("RAČUN "+racun.getId()+": "+racun.getTrgovina().getIme());
+        naziv.setText("RAČUN "+racun.getId()+":");
+        naziv_ime.setText(racun.getTrgovina().getIme());
         naslov.setText(racun.getTrgovina().getNaslov());
-        datum.setText(new SimpleDateFormat("dd.mm.yyyy hh:mm:ss").format(racun.getDatum()));
+        datum.setText(new SimpleDateFormat("dd.MM.yyyy hh:mm:ss").format(racun.getDatum()));
         znesek.setText(String.format("%.2f", racun.getZnesek()) +"€");
         kolicina.setText("Št izdelkov: "+racun.getIzdelki().size());
+
+        naziv_ime.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Trgovina trgovina = new Trgovina(s.toString(), racun.getTrgovina().getNaslov());
+                viewModel.insertTrgovina(trgovina);
+                Trgovina trgovinaNew = viewModel.getTrgovinaByNameAndAddress(trgovina.getIme(), trgovina.getNaslov());
+                racun.setTrgovina(trgovinaNew);
+                racun.setIdTrgovine(trgovinaNew.getId());
+                viewModel.updateRacun(racun);
+            }
+        });
+
+        naslov.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Trgovina trgovina = new Trgovina(racun.getTrgovina().getIme(), s.toString());
+                viewModel.insertTrgovina(trgovina);
+                Trgovina trgovinaNew = viewModel.getTrgovinaByNameAndAddress(trgovina.getIme(), trgovina.getNaslov());
+                racun.setTrgovina(trgovinaNew);
+                racun.setIdTrgovine(trgovinaNew.getId());
+                viewModel.updateRacun(racun);
+            }
+        });
     }
 
     private void GetData(){

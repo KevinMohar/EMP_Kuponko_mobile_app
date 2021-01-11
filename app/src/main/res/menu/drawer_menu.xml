@@ -10,9 +10,6 @@
         <item android:id="@+id/nav_pregled"
             android:icon="@drawable/navigation_drawer_overview"
             android:title="Pregled" />
-        <item android:id="@+id/nav_OpenCV_test"
-            android:icon="@drawable/ic_baseline_adb_24"
-            android:title="OpenCV_test" />
     </group>
 
     <item android:title="Ostalo">

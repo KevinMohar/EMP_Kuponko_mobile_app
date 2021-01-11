@@ -9,24 +9,18 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.Database.Tables.Racun;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
-import com.example.test2.Fragments.ColorTestFragment;
 import com.example.test2.Fragments.HomeFragment;
-import com.example.test2.Fragments.OpenCVtestFragment;
 import com.example.test2.Fragments.OverviewFragment;
-import com.example.test2.Fragments.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,10 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new OverviewFragment())
                         .commit();
-                break;
-            // za testeranje openCV, odstrani na koncu
-            case R.id.nav_OpenCV_test:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OpenCVtestFragment()).commit();
                 break;
             case R.id.nav_izbrisi_db:
                 viewModel.deleteAllMesec();

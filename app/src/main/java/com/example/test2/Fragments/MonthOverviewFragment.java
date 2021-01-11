@@ -1,8 +1,14 @@
 package com.example.test2.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +27,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test2.Database.Tables.Mesec;
 import com.example.test2.Database.Tables.Racun;
+import com.example.test2.Database.Tables.Trgovina;
 import com.example.test2.Database.ViewModels.KuponkoViewModel;
 import com.example.test2.R;
 import com.example.test2.RecyclerView.HomeAdapter;
+import com.example.test2.TrgovinaProcess;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MonthOverviewFragment extends Fragment {
 
@@ -47,6 +65,10 @@ public class MonthOverviewFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
 
     private GraphView graphView;
+
+    private Uri uri;
+    private Bitmap bitmap;
+    private TrgovinaProcess myShops;
 
     @Nullable
     @Override
@@ -142,40 +164,44 @@ public class MonthOverviewFragment extends Fragment {
             @Override
             public void onDeleteClick(int position) {
                 RemoveRecipt(position);
-                Toast.makeText(view.getContext(), "Račun izbrisan", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void OpenRecipt(int pos){
-        // TODO: odpremo pregled racuna
+        Racun racun = currentMonth.getRacuni().get(pos);
+        RacunOverviewFragment rof = new RacunOverviewFragment();
+        Bundle args = new Bundle();
+        args.putInt("idRacuna", racun.getId());
+        rof.setArguments(args);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, rof).commit();
     }
 
     public void RemoveRecipt(final int pos){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
-        View view = LayoutInflater.from(RootView.getContext())
+        final View view = LayoutInflater.from(RootView.getContext())
                 .inflate(R.layout.alert_dialog_warning, (ConstraintLayout) getActivity()
                         .findViewById(R.id.alert_dialog_warning));
         builder.setView(view);
-        ((TextView) view.findViewById(R.id.alert_dialog_insert_title))
+        ((TextView) view.findViewById(R.id.alert_dialog_warning_title))
                 .setText(getResources().getString(R.string.alert_dialog_warning_title));
         ((TextView) view.findViewById(R.id.alert_dialog_warning_description))
                 .setText(getResources().getString(R.string.alert_dialog_warning_description_racuni));
-        ((Button) view.findViewById(R.id.alert_dialog_ročno_btn))
+        ((Button) view.findViewById(R.id.alert_dialog_false_btn))
                 .setText(getResources().getString(R.string.alert_dialog_btn_false));
-        ((Button) view.findViewById(R.id.alert_dialog_slika_btn))
+        ((Button) view.findViewById(R.id.alert_dialog_true_btn))
                 .setText(getResources().getString(R.string.alert_dialog_btn_true));
 
         final AlertDialog alertDialog = builder.create();
 
-        view.findViewById(R.id.alert_dialog_ročno_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.alert_dialog_false_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
             }
         });
 
-        view.findViewById(R.id.alert_dialog_slika_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.alert_dialog_true_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewModel.deleteRacun(currentMonth.getRacuni().get(pos));
@@ -186,6 +212,12 @@ public class MonthOverviewFragment extends Fragment {
                 alertDialog.dismiss();
             }
         });
+
+        if(alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        alertDialog.show();
     }
 
     private void getDate(){
@@ -234,8 +266,93 @@ public class MonthOverviewFragment extends Fragment {
     }
 
     private void VstaviRacunKotSliko(){
-        // TODO: odpres kamero --> slikas --> croppas --> dodas racun v bazo --> dodas racun v array
-        // TODO: ali odpres galerijo --> izberes fotko --> croppas --> dodas racun v bazo --> dodas racun v array
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(getContext(), this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                uri = result.getUri();
+
+                try {
+                    bitmap = getThumbnail(uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();
+
+                if (!textRecognizer.isOperational()) {
+                    Log.w("HomeFragment", "Detector dependencies are not yet available");
+                } else {
+                    Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                    SparseArray<TextBlock> items = textRecognizer.detect(frame);
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for (int i=0; i<items.size();++i) {
+                        TextBlock item = items.valueAt(i);
+                        stringBuilder.append(item.getValue());
+                        stringBuilder.append("\n");
+                    }
+
+                    Log.w("izpis",stringBuilder.toString());
+                    myShops = new TrgovinaProcess();
+
+                    if (myShops.isSet(stringBuilder) && !myShops.error) {
+                        Trgovina trgovina = new Trgovina(myShops.ime, myShops.naslov);
+                        myShops.processIzdelki(stringBuilder);
+                        viewModel.insertTrgovina(trgovina);
+                        Trgovina trgovinaNew = viewModel.getTrgovinaByNameAndAddress(myShops.ime, myShops.naslov);
+                        if (trgovinaNew == null)
+                            trgovinaNew = trgovina;
+
+                        Date cal = Calendar.getInstance().getTime();
+                        Racun racun = new Racun(cal, trgovinaNew.getId(), myShops.znesek, myShops.izdelki);
+                        viewModel.insertRacun(racun);
+                        Racun racunNew = viewModel.getRacunByDate(cal);
+
+                        RacunOverviewFragment rof = new RacunOverviewFragment();
+                        Bundle args = new Bundle();
+                        args.putInt("idRacuna", racunNew.getId());
+                        rof.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, rof).commit();
+                    } else {
+                        Toast.makeText(getContext(), "Trgovina ni podprta!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    public Bitmap getThumbnail(Uri uri) throws FileNotFoundException, IOException{
+        InputStream input = getActivity().getContentResolver().openInputStream(uri);
+
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        onlyBoundsOptions.inDither=true;//optional
+        onlyBoundsOptions.inPreferredConfig=Bitmap.Config.ARGB_8888;//optional
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
+            return null;
+        }
+
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inDither = true;
+        bitmapOptions.inPreferredConfig=Bitmap.Config.ARGB_8888;
+        input = getActivity().getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+        return bitmap;
     }
 
     private void VstaviRacunRocno(){
