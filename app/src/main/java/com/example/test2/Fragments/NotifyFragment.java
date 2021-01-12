@@ -52,8 +52,7 @@ public class NotifyFragment extends Fragment {
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
                 if (switcher.isChecked()) {
-                    long startTime = (30 - Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) * 24 * 60 * 60 * 1000;
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, AlarmManager.INTERVAL_DAY * 30, pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 5*1000, AlarmManager.INTERVAL_DAY, pendingIntent);
                 }
                 else {
                     alarmManager.cancel(pendingIntent);
