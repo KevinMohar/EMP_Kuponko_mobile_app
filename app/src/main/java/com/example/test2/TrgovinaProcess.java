@@ -110,9 +110,9 @@ public class TrgovinaProcess {
                     }
                     tempZneseki.add(znk);
                 } catch (Exception e) {
+                    if (lines[i].length() > 1)
                     tempImena.add(lines[i]);
                 }
-                checker = true;
             }
 
             if (lines[i].contains(start))
